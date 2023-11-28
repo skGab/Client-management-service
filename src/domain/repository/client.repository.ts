@@ -1,10 +1,12 @@
+import { ClientEntity } from './../entity/client.entity';
 import { Injectable } from '@nestjs/common';
 
+// DRIVEN PORT
 @Injectable()
 export abstract class ClientRepository {
-  abstract findAll(): void;
-  abstract getById(): void;
-  abstract create(): void;
-  abstract update(): void;
-  abstract delete(): void;
+  // abstract findAll(): Promise<ClientEntity[]>;
+  // abstract getById(id: string): Promise<ClientEntity>;
+  abstract create(clientEntity: ClientEntity): Promise<boolean>;
+  // abstract update(): void;
+  // abstract delete(): Promise<Boolean>;
 }
