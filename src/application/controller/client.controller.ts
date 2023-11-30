@@ -9,11 +9,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { ClientManagementUsecase } from '../usecases/client-management-usecase';
-import {
-  ClientRegistrationDto,
-  RegistrationSchema,
-} from '../dtos/clientRegistration.dto';
-import { ClientDto } from '../dtos/client.dto';
+import { ClientRegistrationDto } from '../dtos/clientRegistration.dto';
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
 
 // DRIVING ADAPTER
@@ -37,9 +33,12 @@ export class ClientController {
 
   // CREATE A CLIENT
   @Post('registration')
+
   // VALIDATION PIPE
-  @UsePipes(new ZodValidationPipe(RegistrationSchema))
-  registerClient(@Body() clientRegistrationDto: ClientRegistrationDto) {
+  @UsePipes(new ZodValidationPipe(ClientRegistrationDto))
+  registerClient(
+    @Body() clientRegistrationDto: (typeof ClientRegistrationDto)['_input'],
+  ) {
     return this.clientManagementUsecase.create(clientRegistrationDto);
   }
 

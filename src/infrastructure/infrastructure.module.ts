@@ -1,3 +1,4 @@
+import { PrismaService } from './services/prisma-adapter.service';
 import { Module } from '@nestjs/common';
 import { ClientRepository } from 'src/domain/repository/client.repository';
 import { ClientRepositoryService } from './repositories/client-repository.service';
@@ -6,6 +7,8 @@ import { ClientRepositoryService } from './repositories/client-repository.servic
   imports: [],
   controllers: [],
   providers: [
+    PrismaService,
+
     {
       provide: ClientRepository,
       useClass: ClientRepositoryService,

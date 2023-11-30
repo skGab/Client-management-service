@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  // url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
+}
+
+model Client {
+  id                            String @id @unique
+  razao_social                  String
+  nome_fantasia                 String
+  site                          String
+  cnpj_cpf                      String
+  insc_estadual                 String
+  email                         String @unique
+  endereco_atendimento          String
+  bairro                        String
+  cep                           String
+  cidade                        String
+  estado                        String
+  ddd                           String
+  fax                           String
+  telefone                      String
+  endereco_faturamento          String
+  bairro_faturamento            String
+  cep_faturamento               String
+  cidade_faturamento            String
+  estado_faturamento            String
+  ddd_faturamento               String
+  fax_faturamento               String
+  telefone_faturamento          String
+  responsavel_financeiro        String
+  ddd_financeiro                String
+  telefone_financeiro           String
+  email_financeiro              String
+  nome_representante            String
+  estado_civil_representante    String
+  profissao_representante       String
+  rg_representante              String
+  cpf_representante             String
+  email_representante           String
+  telefone_representante        String
+  nascimento_representante      String
+  email_boleto_notas            String
+  nome_segundo_contato          String
+  estado_civil_segundo_contato  String
+  profissao_segundo_contato     String
+  rg_segundo_contato            String
+  cpf_segundo_contato           String
+  email_segundo_contato         String
+  telefone_segundo_contato      String
+  nascimento_segundo_contato    String
+  nome_terceiro_contato         String
+  estado_civil_terceiro_contato String
+  profissao_terceiro_contato    String
+  rg_terceiro_contato           String
+  cpf_terceiro_contato          String
+  email_terceiro_contato        String
+  telefone_terceiro_contato     String
+  nascimento_terceiro_contato   String
+}

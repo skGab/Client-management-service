@@ -1,5 +1,6 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export interface FormContract {
-  id: string;
   razao_social: string;
   nome_fantasia: string;
   site: string;
@@ -67,5 +68,13 @@ export interface FormContract {
   nascimento_terceiro_contato: string;
 }
 export class ClientEntity {
-  constructor(public registrationForm: FormContract) {}
+  private id: string;
+
+  constructor(public registrationForm: FormContract) {
+    this.id = uuidv4();
+  }
+
+  getId() {
+    return this.id;
+  }
 }
