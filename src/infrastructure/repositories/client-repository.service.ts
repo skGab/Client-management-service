@@ -16,11 +16,24 @@ export class ClientRepositoryService implements ClientRepository {
   // }
 
   async create(clientEntity: ClientEntity) {
+    // MAP ENTITY TO PRISMA CLIENT
     const data = this.prisma.mapToPrismaClient(clientEntity);
 
-    return this.prisma.client.create({
-      data,
+    // CHECK IF CLIENT EMAIL ALREADY EXISTS ON THE DB
+    const client = await this.prisma.client.findUnique({
+      where: {
+        email: data.email,
+      },
     });
+
+    // SAVE NEW CLIENT
+    if (client === null) {
+      return await this.prisma.client.create({
+        data,
+      });
+    }
+
+    return client;
   }
 
   // update(): void {
