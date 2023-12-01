@@ -27,7 +27,7 @@ export class ClientManagementUsecase {
       const clientEntity = new ClientEntity(registrationForm);
 
       // SAVE ON THE DB
-      return this.clientRepositoryService.create(clientEntity);
+      return await this.clientRepositoryService.create(clientEntity);
     } catch (error) {
       this.logger.error(error.message);
       return error;

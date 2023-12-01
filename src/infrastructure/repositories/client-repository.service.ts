@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ClientRepository } from 'src/domain/repository/client.repository';
 import { PrismaService } from '../services/prisma-adapter.service';
-import { Prisma } from '@prisma/client';
 import { ClientEntity } from 'src/domain/entity/client.entity';
 
 @Injectable()
@@ -28,12 +27,14 @@ export class ClientRepositoryService implements ClientRepository {
 
     // SAVE NEW CLIENT
     if (client === null) {
-      return await this.prisma.client.create({
+      await this.prisma.client.create({
         data,
       });
+
+      return 'Novo cliente Registrado';
     }
 
-    return client;
+    return 'Cliente já registrado';
   }
 
   // update(): void {

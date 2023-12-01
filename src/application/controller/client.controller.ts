@@ -36,10 +36,8 @@ export class ClientController {
 
   // VALIDATION PIPE
   @UsePipes(new ZodValidationPipe(ClientRegistrationDto))
-  registerClient(
-    @Body() clientRegistrationDto: (typeof ClientRegistrationDto)['_input'],
-  ) {
-    return this.clientManagementUsecase.create(clientRegistrationDto);
+  async registerClient(@Body() clientRegistrationDto: any) {
+    return await this.clientManagementUsecase.create(clientRegistrationDto);
   }
 
   // // UPDATE CLIENT
