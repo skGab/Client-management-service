@@ -1,6 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
+import { MainEntity } from './main.entity';
 
-export interface FormContract {
+export interface FormRegistration {
   razao_social: string;
   nome_fantasia: string;
   site: string;
@@ -67,14 +67,8 @@ export interface FormContract {
   telefone_terceiro_contato: string;
   nascimento_terceiro_contato: string;
 }
-export class ClientEntity {
-  private id: string;
-
-  constructor(public registrationForm: FormContract) {
-    this.id = uuidv4();
-  }
-
-  getId() {
-    return this.id;
+export class ClientEntity extends MainEntity {
+  constructor(public formRegistration: FormRegistration) {
+    super();
   }
 }

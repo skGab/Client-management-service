@@ -1,7 +1,7 @@
 import { ClientRegistrationDto } from './../dtos/clientRegistration.dto';
 import { ClientRepository } from 'src/domain/repository/client.repository';
 import { Injectable, Logger } from '@nestjs/common';
-import { ClientEntity, FormContract } from 'src/domain/entity/client.entity';
+import { ClientEntity, FormRegistration } from 'src/domain/entity/client.entity';
 
 @Injectable()
 export class ClientManagementUsecase {
@@ -36,7 +36,7 @@ export class ClientManagementUsecase {
 
   private mapToEntity(
     registrationFormDto: (typeof ClientRegistrationDto)['_input'],
-  ): FormContract {
+  ): FormRegistration {
     return {
       razao_social: registrationFormDto.basicInfo.razao_social,
       nome_fantasia: registrationFormDto.basicInfo.nome_fantasia,
