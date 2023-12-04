@@ -64,3 +64,27 @@ model Client {
   telefone_terceiro_contato     String
   nascimento_terceiro_contato   String
 }
+
+model Contract {
+  id                                 String  @id @unique
+  cliente_novo                       Boolean
+  cnpj_cliente                       String  @unique
+  razao_social                       String?
+  nome_fantasia                      String?
+  nome_contato                       String?
+  email_contato                      String?
+  servicos_prestados                 Json
+  emissao_de_nota                    String
+  retencao_iss_emissao_nota_fiscal   String
+  forma_recebimento                  String
+  tipo                               String
+  inicio_vigencia                    String?
+  termino_vigencia                   String?
+  periodicidade                      String?
+  valor_do_periodo                   String?
+  observacoes_adicionais             String?
+  valor_total_servicos               String?
+  numero_parcelas                    String?
+  data_vencimento                    String?
+  observacoes_adicionais_nota_fiscal String?
+}

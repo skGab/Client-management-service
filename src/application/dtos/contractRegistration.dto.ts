@@ -9,7 +9,8 @@ const tipo_recorrente = z
     valor_do_periodo: z.string(),
     observacoes_adicionais: z.string(),
   })
-  .optional();
+  .optional()
+  .nullable();
 
 //   AVULSO
 const tipo_avulso = z
@@ -19,7 +20,8 @@ const tipo_avulso = z
     data_vencimento: z.string(),
     observacoes_adicionais_nota_fiscal: z.string(),
   })
-  .optional();
+  .optional()
+  .nullable();
 
 //
 export const ContractRegistrationDto = z.object({

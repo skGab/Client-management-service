@@ -1,6 +1,11 @@
+import { ContractEntity } from './../../domain/entity/contract.entity';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { ClientEntity } from 'src/domain/entity/client.entity';
+
+export interface EntityMapper<T> {
+  mapToPrismaClient(entity: T): Prisma.ClientCreateInput;
+}
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
@@ -94,6 +99,43 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
         clientEntity.formRegistration.telefone_terceiro_contato,
       nascimento_terceiro_contato:
         clientEntity.formRegistration.nascimento_terceiro_contato,
+    };
+  }
+
+  public mapToPrismaContract(
+    contractEntity: ContractEntity,
+  ): Prisma.ContractCreateInput {
+    return {
+      id: contractEntity.getId(),
+      cliente_novo: contractEntity.contractRegistration.cliente_novo,
+      cnpj_cliente: contractEntity.contractRegistration.cnpj_cliente,
+      razao_social: contractEntity.contractRegistration.razao_social,
+      nome_fantasia: contractEntity.contractRegistration.nome_fantasia,
+      nome_contato: contractEntity.contractRegistration.nome_contato,
+      email_contato: contractEntity.contractRegistration.email_contato,
+      servicos_prestados:
+        contractEntity.contractRegistration.servicos_prestados,
+      emissao_de_nota: contractEntity.contractRegistration.emissao_de_nota,
+      retencao_iss_emissao_nota_fiscal:
+        contractEntity.contractRegistration.retencao_iss_emissao_nota_fiscal,
+      forma_recebimento: contractEntity.contractRegistration.forma_recebimento,
+      tipo: contractEntity.contractRegistration.tipo,
+
+      // RECORRENTE
+      inicio_vigencia: contractEntity.contractRegistration.inicio_vigencia,
+      termino_vigencia: contractEntity.contractRegistration.termino_vigencia,
+      periodicidade: contractEntity.contractRegistration.periodicidade,
+      valor_do_periodo: contractEntity.contractRegistration.valor_do_periodo,
+      observacoes_adicionais:
+        contractEntity.contractRegistration.observacoes_adicionais,
+
+      // AVULSO
+      valor_total_servicos:
+        contractEntity.contractRegistration.valor_total_servicos,
+      numero_parcelas: contractEntity.contractRegistration.numero_parcelas,
+      data_vencimento: contractEntity.contractRegistration.data_vencimento,
+      observacoes_adicionais_nota_fiscal:
+        contractEntity.contractRegistration.observacoes_adicionais_nota_fiscal,
     };
   }
 }
