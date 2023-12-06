@@ -1,0 +1,7 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    script: |
+      docker build -t southamerica-east1-docker.pkg.dev/black-beans-dados/cloud-run-source-deploy/client-management-service:api .
+    automapSubstitutions: true
+images:
+  - 'southamerica-east1-docker.pkg.dev/black-beans-dados/cloud-run-source-deploy/client-management-service:api'
