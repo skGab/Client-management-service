@@ -1,13 +1,22 @@
-import { ClientRegistrationDto } from './../dtos/clientRegistration.dto';
-import { Body, Controller, Post, UsePipes } from '@nestjs/common';
-import { ClientManagementUsecase } from '../usecases/client-management-usecase';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Put,
+  UsePipes,
+} from '@nestjs/common';
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
+import { ContractRegistrationDto } from '../dtos/contractRegistration.dto';
+import { ContractManagementUsecase } from '../usecases/contract-management-usecase';
 
 // DRIVING ADAPTER
-@Controller('clients')
-export class ClientController {
+@Controller('contracts')
+export class ContractController {
   constructor(
-    private readonly clientManagementUsecase: ClientManagementUsecase,
+    private readonly contractManagementUsecase: ContractManagementUsecase,
   ) {}
 
   // // RETURN ALL CLIENTS
@@ -26,11 +35,11 @@ export class ClientController {
   @Post('registration')
 
   // VALIDATION PIPE
-  @UsePipes(new ZodValidationPipe(ClientRegistrationDto))
-  async registerClient(
-    @Body() clientRegistrationDto: (typeof ClientRegistrationDto)['_input'],
+  @UsePipes(new ZodValidationPipe(ContractRegistrationDto))
+  async registerContract(
+    @Body() contractRegistration: (typeof ContractRegistrationDto)['_input'],
   ) {
-    return await this.clientManagementUsecase.create(clientRegistrationDto);
+    return await this.contractManagementUsecase.create(contractRegistration);
   }
 
   // // UPDATE CLIENT
