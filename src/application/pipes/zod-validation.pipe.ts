@@ -15,9 +15,7 @@ export class ZodValidationPipe implements PipeTransform {
       this.logger.error(error.message);
 
       // LOG THE MESSAGE TO THE CLIENT
-      throw new BadGatewayException(
-        `Não foram encontrados campos para validação`,
-      );
+      throw new BadGatewayException(`Falha nos dados recebidos`);
     }
 
     // RETURNING VALID DATA

@@ -1,7 +1,7 @@
-import { ContractRegistrationDto } from './../dtos/contractRegistration.dto';
+import { ContractRegistrationDto } from '../dtos/contract-registration.dto';
 import { ContractRegistration } from 'src/domain/entity/contract.entity';
 import { FormRegistration } from 'src/domain/entity/client.entity';
-import { ClientRegistrationDto } from '../dtos/clientRegistration.dto';
+import { ClientRegistrationDto } from '../dtos/client-registration.dto';
 
 export class EntityFactoryService {
   public mapContractEntity(

@@ -1,6 +1,6 @@
 import { EntityFactoryService } from './../factory/entity-factory.service';
 import { Injectable, Logger } from '@nestjs/common';
-import { ContractRegistrationDto } from '../dtos/contractRegistration.dto';
+import { ContractRegistrationDto } from '../dtos/contract-registration.dto';
 import { ContractEntity } from 'src/domain/entity/contract.entity';
 import { ContractRepository } from 'src/domain/repository/contract.repository';
 
