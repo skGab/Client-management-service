@@ -1,8 +1,9 @@
-import { EntityFactoryService } from './../factory/entity-factory.service';
-import { ClientRegistrationDto } from './../dtos/clientRegistration.dto';
-import { ClientRepository } from 'src/domain/repository/client.repository';
 import { Injectable, Logger } from '@nestjs/common';
+import { EntityFactoryService } from './../factory/entity-factory.service';
+import { ClientRegistrationDto } from '../dtos/client-registration.dto';
+import { ClientRepository } from 'src/domain/repository/client.repository';
 import { ClientEntity } from 'src/domain/entity/client.entity';
+import { ClientFieldsDto } from '../dtos/client-fields.dto';
 
 @Injectable()
 export class ClientManagementUsecase {
@@ -13,14 +14,28 @@ export class ClientManagementUsecase {
     private entityFactoryService: EntityFactoryService,
   ) {}
 
-  // findAll() {
-  //   return this.clientRepositoryService.findAll();
+  async findAll() {
+    // GET CLIENTS
+    const response = await this.clientRepositoryService.findAll();
 
-  //   // const clients =
-  //   // const response = clients.map((client: ClientDto) => {
-  //   //   return {};
-  //   // });
-  // }
+    if (response === null)
+      return { message: 'Nenhum cliente registrado no banco' };
+
+    // MAPPING VALUE OBJECT TO DTO
+    const dto = response.map(
+      (client) =>
+        new ClientFieldsDto(
+          client.id,
+          client.nome_fantasia,
+          client.email,
+          client.ddd,
+          client.telefone,
+        ),
+    );
+
+    // RETURN CLIENT DTO
+    return dto;
+  }
 
   async create(registrationFormDto: (typeof ClientRegistrationDto)['_input']) {
     try {

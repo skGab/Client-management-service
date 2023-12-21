@@ -9,7 +9,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
-import { ContractRegistrationDto } from '../dtos/contractRegistration.dto';
+import { ContractRegistrationDto } from '../dtos/contract-registration.dto';
 import { ContractManagementUsecase } from '../usecases/contract-management-usecase';
 
 // DRIVING ADAPTER

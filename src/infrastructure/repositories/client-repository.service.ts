@@ -2,14 +2,49 @@ import { Injectable } from '@nestjs/common';
 import { ClientRepository } from 'src/domain/repository/client.repository';
 import { PrismaService } from '../services/prisma-adapter.service';
 import { ClientEntity } from 'src/domain/entity/client.entity';
+import { ClientFieldsVo } from 'src/domain/valueObject/client-fields.vo';
 
 @Injectable()
 export class ClientRepositoryService implements ClientRepository {
   constructor(private prisma: PrismaService) {}
 
-  // findAll(): ClientEntity[] {
-  //   throw new Error('Method not implemented.');
-  // }
+  async findAll(): Promise<ClientFieldsVo[]> {
+    try {
+      // FEETCHING CLIENT
+      const response = await this.prisma.client.findMany({
+        // WITH SPECIFIC FIELDS
+        select: {
+          id: true,
+          nome_fantasia: true,
+          email: true,
+          ddd: true,
+          telefone: true,
+        },
+      });
+
+      // RETURN NULL IF ANY CLIENTS ON DB
+      if (response.length === 0 || response === null) return null;
+
+      // MAP REPSONSE TO VALUE OBJECT
+      const clientsVo = response.map(
+        (client) =>
+          new ClientFieldsVo(
+            client.id,
+            client.nome_fantasia,
+            client.email,
+            client.ddd,
+            client.telefone,
+          ),
+      );
+
+      // RETURNING VO
+      return clientsVo;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
   // getById(): ClientEntity {
   //   throw new Error('Method not implemented.');
   // }

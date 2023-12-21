@@ -1,5 +1,5 @@
-import { ClientRegistrationDto } from './../dtos/clientRegistration.dto';
-import { Body, Controller, Post, UsePipes } from '@nestjs/common';
+import { ClientRegistrationDto } from '../dtos/client-registration.dto';
+import { Body, Controller, Get, Post, UsePipes } from '@nestjs/common';
 import { ClientManagementUsecase } from '../usecases/client-management-usecase';
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
 
@@ -10,11 +10,11 @@ export class ClientController {
     private readonly clientManagementUsecase: ClientManagementUsecase,
   ) {}
 
-  // // RETURN ALL CLIENTS
-  // @Get()
-  // getAllClients() {
-  //   return this.clientManagementUsecase.findAll();
-  // }
+  // RETURN ALL CLIENTS
+  @Get()
+  async getAllClients() {
+    return await this.clientManagementUsecase.findAll();
+  }
 
   // // GET CLIENT BY ID
   // @Get(':id')
