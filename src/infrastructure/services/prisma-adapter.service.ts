@@ -104,6 +104,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 
   public mapToPrismaContract(
     contractEntity: ContractEntity,
+    clientId: string,
   ): Prisma.ContractCreateInput {
     return {
       id: contractEntity.getId(),
@@ -136,6 +137,13 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       data_vencimento: contractEntity.contractRegistration.data_vencimento,
       observacoes_adicionais_nota_fiscal:
         contractEntity.contractRegistration.observacoes_adicionais_nota_fiscal,
+
+      // CLIENT KEY
+      Client: {
+        connect: {
+          id: clientId,
+        },
+      },
     };
   }
 }

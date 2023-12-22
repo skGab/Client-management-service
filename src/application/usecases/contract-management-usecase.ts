@@ -13,6 +13,7 @@ export class ContractManagementUsecase {
     private entityFactoryService: EntityFactoryService,
   ) {}
 
+  // GET CLIENTS
   // findAll() {
   //   return this.clientRepositoryService.findAll();
 
@@ -22,6 +23,7 @@ export class ContractManagementUsecase {
   //   // });
   // }
 
+  // CREATE CLIENTS
   async create(
     contractRegistrationDto: (typeof ContractRegistrationDto)['_input'],
   ) {

@@ -14,8 +14,8 @@ export class ClientManagementUsecase {
     private entityFactoryService: EntityFactoryService,
   ) {}
 
+  // GET CLIENTS
   async findAll() {
-    // GET CLIENTS
     const response = await this.clientRepositoryService.findAll();
 
     if (response === null)
@@ -37,6 +37,7 @@ export class ClientManagementUsecase {
     return dto;
   }
 
+  // CREATE CLIENTS
   async create(registrationFormDto: (typeof ClientRegistrationDto)['_input']) {
     try {
       // CONVERT DTO FORM TO ENTITY
