@@ -15,7 +15,7 @@ model Client {
   razao_social                  String
   nome_fantasia                 String
   site                          String
-  cnpj_cpf                      String
+  cnpj_cpf                      String     @unique
   insc_estadual                 String
   email                         String     @unique
   endereco_atendimento          String
@@ -69,7 +69,7 @@ model Client {
 model Contract {
   id                                 String  @id @unique
   cliente_novo                       Boolean
-  cnpj_cliente                       String  @unique
+  cnpj_cpf                           String
   razao_social                       String?
   nome_fantasia                      String?
   nome_contato                       String?

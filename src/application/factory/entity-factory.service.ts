@@ -9,7 +9,7 @@ export class EntityFactoryService {
   ): ContractRegistration {
     return {
       cliente_novo: contractRegistrationDto.cliente_novo,
-      cnpj_cliente: contractRegistrationDto.cnpj_cliente,
+      cnpj_cpf: contractRegistrationDto.cnpj_cpf,
       razao_social: contractRegistrationDto.razao_social,
       nome_fantasia: contractRegistrationDto.nome_fantasia,
       nome_contato: contractRegistrationDto.nome_contato,

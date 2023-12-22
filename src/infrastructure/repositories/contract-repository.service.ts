@@ -15,26 +15,30 @@ export class ContractRepositoryService implements ContractRepository {
   // }
 
   async create(contractEntity: ContractEntity): Promise<string> {
-    // MAP ENTITY TO PRISMA CLIENT
-    const data = this.prisma.mapToPrismaContract(contractEntity);
-
-    // CHECK IF CLIENT EMAIL ALREADY EXISTS ON THE DB
-    const contract = await this.prisma.contract.findUnique({
+    //FIND RELATED CLIENT BY CNPJ OR CPF
+    const client = await this.prisma.client.findUnique({
+      select: {
+        id: true,
+      },
       where: {
-        cnpj_cliente: data.cnpj_cliente,
+        cnpj_cpf: contractEntity.contractRegistration.cnpj_cpf,
       },
     });
 
-    // SAVE NEW CLIENT
-    if (contract === null) {
-      await this.prisma.contract.create({
-        data,
-      });
-
-      return 'Novo Contrato Registrado';
+    // CHECK IF CLIENT EXISTS
+    if (!client || client === null) {
+      return 'É necessario cadastrar o cliente com mesmo cnpj/cpf, antes de enviar o contrato.';
     }
 
-    return 'Contrato já registrado';
+    // MAP ENTITY TO PRISMA CLIENT
+    const data = this.prisma.mapToPrismaContract(contractEntity, client);
+
+    // SAVE NEW CONTRACT
+    await this.prisma.contract.create({
+      data,
+    });
+
+    return 'Novo Contrato Registrado';
   }
 
   // update(): void {

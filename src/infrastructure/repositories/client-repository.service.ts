@@ -31,8 +31,6 @@ export class ClientRepositoryService implements ClientRepository {
       // RETURN NULL IF ANY CLIENTS ON DB
       if (response.length === 0 || response === null) return null;
 
-      console.log(response);
-
       // MAP REPSONSE TO VALUE OBJECT
       const clientsVo = response.map(
         (client) =>
@@ -42,10 +40,14 @@ export class ClientRepositoryService implements ClientRepository {
             client.email,
             client.ddd,
             client.telefone,
-            client.contracts.map((contract) => contract.tipo),
-            client.contracts.map((contract) => contract.termino_vigencia),
+            client.contracts.map((contract) => ({
+              tipo: contract.tipo,
+              termino_vigencia: contract.termino_vigencia,
+            })),
           ),
       );
+
+      console.log(clientsVo);
 
       // RETURNING VO
       return clientsVo;

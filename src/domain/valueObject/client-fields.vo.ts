@@ -5,8 +5,7 @@ export class ClientFieldsVo {
     public email: string,
     public telefone: string,
     public ddd: string,
-    public tipo: string[],
-    public termino_vigencia?: string[],
+    public contracts: { tipo: string; termino_vigencia: string }[],
   ) {}
 
   // get status(): string {

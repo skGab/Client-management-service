@@ -4,6 +4,7 @@ import { ClientRegistrationDto } from '../dtos/client-registration.dto';
 import { ClientRepository } from 'src/domain/repository/client.repository';
 import { ClientEntity } from 'src/domain/entity/client.entity';
 import { ClientFieldsDto } from '../dtos/client-fields.dto';
+import { ManageClientStatus } from '../services/manage-client-status.service';
 
 @Injectable()
 export class ClientManagementUsecase {
@@ -12,6 +13,7 @@ export class ClientManagementUsecase {
   constructor(
     private clientRepositoryService: ClientRepository,
     private entityFactoryService: EntityFactoryService,
+    private manageClientStatus: ManageClientStatus,
   ) {}
 
   // GET CLIENTS
@@ -20,6 +22,8 @@ export class ClientManagementUsecase {
 
     if (response === null)
       return { message: 'Nenhum cliente registrado no banco' };
+
+    const status = this.manageClientStatus.run(response);
 
     // MAPPING VALUE OBJECT TO DTO
     const dto = response.map(
@@ -30,6 +34,7 @@ export class ClientManagementUsecase {
           client.email,
           client.ddd,
           client.telefone,
+          // status,
         ),
     );
 
