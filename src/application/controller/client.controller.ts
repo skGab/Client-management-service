@@ -1,5 +1,5 @@
 import { ClientRegistrationDto } from '../dtos/client-registration.dto';
-import { Body, Controller, Get, Post, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
 import { ClientManagementUsecase } from '../usecases/client-management-usecase';
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
 
@@ -17,10 +17,10 @@ export class ClientController {
   }
 
   // // GET CLIENT BY ID
-  // @Get(':id')
-  // getClientById(@Body() clientRegistrationDto: ClientRegistrationDto) {
-  //   return this.clientManagementUsecase.create(clientRegistrationDto);
-  // }
+  @Get(':id')
+  getClientById(@Param('id') id: string) {
+    return this.clientManagementUsecase.findById(id);
+  }
 
   // CREATE A CLIENT
   @Post('registration')

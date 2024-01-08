@@ -6,7 +6,7 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export abstract class ClientRepository {
   abstract findAll(): Promise<ClientFieldsVo[]>;
-  // abstract getById(id: string): Promise<ClientEntity>;
+  abstract findOne(id: string): Promise<ClientEntity>;
   abstract create(clientEntity: ClientEntity);
   // abstract update(): void;
   // abstract delete(): Promise<Boolean>;
