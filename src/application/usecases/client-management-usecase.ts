@@ -18,15 +18,13 @@ export class ClientManagementUsecase {
 
   // GET CLIENTS
   async findAll() {
-    const response = await this.clientRepositoryService.findAll();
+    const clients = await this.clientRepositoryService.findAll();
 
-    if (response === null)
+    if (clients === null)
       return { message: 'Nenhum cliente registrado no banco' };
 
-    const status = this.manageClientStatus.run(response);
-
     // MAPPING VALUE OBJECT TO DTO
-    const dto = response.map(
+    const dto = clients.map(
       (client) =>
         new ClientFieldsDto(
           client.id,
@@ -34,7 +32,7 @@ export class ClientManagementUsecase {
           client.email,
           client.ddd,
           client.telefone,
-          // status,
+          this.manageClientStatus.run(client),
         ),
     );
 

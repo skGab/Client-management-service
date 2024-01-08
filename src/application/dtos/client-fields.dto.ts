@@ -5,6 +5,6 @@ export class ClientFieldsDto {
     public email: string,
     public telefone: string,
     public ddd: string,
-    // public status: string,
+    public status: string,
   ) {}
 }
