@@ -5,5 +5,10 @@ export class ClientFieldsVo {
     public email: string,
     public telefone: string,
     public ddd: string,
+    public contracts: { tipo: string; termino_vigencia: string }[],
   ) {}
+
+  // get status(): string {
+  //   if (this.tipo === 'avulso') return 'Avulso';
+  // }
 }

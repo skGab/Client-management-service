@@ -19,6 +19,12 @@ export class ClientRepositoryService implements ClientRepository {
           email: true,
           ddd: true,
           telefone: true,
+          contracts: {
+            select: {
+              tipo: true,
+              termino_vigencia: true,
+            },
+          },
         },
       });
 
@@ -34,8 +40,14 @@ export class ClientRepositoryService implements ClientRepository {
             client.email,
             client.ddd,
             client.telefone,
+            client.contracts.map((contract) => ({
+              tipo: contract.tipo,
+              termino_vigencia: contract.termino_vigencia,
+            })),
           ),
       );
+
+      console.log(clientsVo);
 
       // RETURNING VO
       return clientsVo;

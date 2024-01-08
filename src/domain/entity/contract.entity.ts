@@ -2,7 +2,7 @@ import { MainEntity } from './main.entity';
 
 export interface ContractRegistration {
   cliente_novo: boolean;
-  cnpj_cliente: string;
+  cnpj_cpf: string;
   razao_social?: string;
   nome_fantasia?: string;
   nome_contato?: string;
