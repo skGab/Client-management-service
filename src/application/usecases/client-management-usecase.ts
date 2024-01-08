@@ -16,6 +16,26 @@ export class ClientManagementUsecase {
     private manageClientStatus: ManageClientStatus,
   ) {}
 
+  // FIND CLIENT BY ID
+  async findById(id: string): Promise<ClientEntity | string> {
+    // I CAN RETURN A CLIENT DTO INSTEAD
+    try {
+      if (!id || id === null || id === undefined)
+        return 'ID não encontrado na requisição';
+
+      // GET CLIENT
+      const client = await this.clientRepositoryService.findOne(id);
+
+      if (!client || client === undefined || client === null)
+        return 'Cliente não encontrado';
+
+      // RETURN IT
+      return client;
+    } catch (error) {
+      this.logger.error(error);
+    }
+  }
+
   // GET CLIENTS
   async findAll() {
     const clients = await this.clientRepositoryService.findAll();

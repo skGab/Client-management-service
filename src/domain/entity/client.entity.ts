@@ -1,6 +1,6 @@
 import { MainEntity } from './main.entity';
 
-export interface FormRegistration {
+export interface ClientContract {
   razao_social: string;
   nome_fantasia: string;
   site: string;
@@ -68,7 +68,7 @@ export interface FormRegistration {
   nascimento_terceiro_contato: string;
 }
 export class ClientEntity extends MainEntity {
-  constructor(public formRegistration: FormRegistration) {
+  constructor(public clientContract: ClientContract) {
     super();
   }
 }

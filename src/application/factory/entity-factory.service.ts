@@ -1,6 +1,6 @@
 import { ContractRegistrationDto } from '../dtos/contract-registration.dto';
 import { ContractRegistration } from 'src/domain/entity/contract.entity';
-import { FormRegistration } from 'src/domain/entity/client.entity';
+import { ClientContract } from 'src/domain/entity/client.entity';
 import { ClientRegistrationDto } from '../dtos/client-registration.dto';
 
 export class EntityFactoryService {
@@ -41,7 +41,7 @@ export class EntityFactoryService {
 
   public mapClientEntity(
     registrationFormDto: (typeof ClientRegistrationDto)['_input'],
-  ): FormRegistration {
+  ): ClientContract {
     return {
       razao_social: registrationFormDto.basicInfo.razao_social,
       nome_fantasia: registrationFormDto.basicInfo.nome_fantasia,
