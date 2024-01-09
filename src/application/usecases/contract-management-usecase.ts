@@ -43,4 +43,12 @@ export class ContractManagementUsecase {
       return error;
     }
   }
+
+  // RETURN EXPIRING CONRACTS
+  async expiring() {
+    // GET CONTRACTS
+    // CHECK THE EXPIRING DATE OF EACH TYPE "RECORRENTE" E "AVULSO"
+    // RETURN THE DTO CONTRACTS THAT IS EXPIRING
+    // RETURN AN MESSAGE OF ANY EXPIRING CONTRACTS IF IS NOT
+  }
 }

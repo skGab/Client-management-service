@@ -53,4 +53,10 @@ export class ContractController {
   // deleteClient(@Body() clientRegistrationDto: ClientRegistrationDto) {
   //   return this.clientManagementUsecase.create(clientRegistrationDto);
   // }
+
+  // EXPIRING CONTRACTS
+  @Get()
+  expiringContracts() {
+    return this.contractManagementUsecase.expiring();
+  }
 }
