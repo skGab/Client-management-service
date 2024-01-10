@@ -5,10 +5,14 @@ import { Injectable } from '@nestjs/common';
 // DRIVEN PORT
 @Injectable()
 export abstract class ContractRepository {
-  // abstract findAll(): Promise<ClientEntity[]>;
-  abstract getContractById(id: string): Promise<ContractEntity | string>;
+  // GET UNIQUE CONTRACT
+  abstract getContractById(id: {
+    id: string;
+  }): Promise<ContractEntity | string>;
+
+  // GET EXPIRING CONTRACTS
   abstract getExpiring(): Promise<ExpiringContractVo[]>;
+
+  // CREATE CONTRACTS
   abstract create(contractEntity: ContractEntity): Promise<string>;
-  // abstract update(): void;
-  // abstract delete(): Promise<Boolean>;
 }
