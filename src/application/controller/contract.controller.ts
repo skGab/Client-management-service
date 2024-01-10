@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Post,
   Put,
   UsePipes,
@@ -25,11 +26,11 @@ export class ContractController {
   //   return this.clientManagementUsecase.findAll();
   // }
 
-  // // GET CLIENT BY ID
-  // @Get(':id')
-  // getClientById(@Body() clientRegistrationDto: ClientRegistrationDto) {
-  //   return this.clientManagementUsecase.create(clientRegistrationDto);
-  // }
+  // GET CONTRACT BY ID
+  @Get(':id')
+  getContractById(@Param() id: string) {
+    return this.contractManagementUsecase.getContractById(id);
+  }
 
   // CREATE A CLIENT
   @Post('registration')
@@ -53,4 +54,10 @@ export class ContractController {
   // deleteClient(@Body() clientRegistrationDto: ClientRegistrationDto) {
   //   return this.clientManagementUsecase.create(clientRegistrationDto);
   // }
+
+  // EXPIRING CONTRACTS
+  @Get('expiring')
+  expiringContracts() {
+    return this.contractManagementUsecase.expiring();
+  }
 }
