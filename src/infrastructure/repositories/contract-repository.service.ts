@@ -3,7 +3,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../services/prisma-adapter.service';
 import { ContractRepository } from 'src/domain/repository/contract.repository';
 import { ExpiringContractVo } from 'src/domain/valueObject/expiring-contract.vo';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ContractRepositoryService implements ContractRepository {
@@ -16,10 +15,10 @@ export class ContractRepositoryService implements ContractRepository {
   // }
 
   // GET CONTRACT BY CNPJ
-  async getContractById(id: string): Promise<ContractEntity | string> {
+  async getContractById(id: { id: string }): Promise<ContractEntity | string> {
     try {
       const contracts = await this.prisma.contract.findUnique({
-        where: { id: id },
+        where: { id: id.id },
       });
 
       if (contracts === null) return 'Contrato não encontrado';

@@ -28,7 +28,7 @@ export class ContractController {
 
   // GET CONTRACT BY ID
   @Get(':id')
-  getContractById(@Param() id: string) {
+  getContractById(@Param() id: { id: string }) {
     return this.contractManagementUsecase.getContractById(id);
   }
 

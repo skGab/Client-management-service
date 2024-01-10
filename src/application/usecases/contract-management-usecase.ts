@@ -25,7 +25,7 @@ export class ContractManagementUsecase {
   // }
 
   // GET CONTRACT BY ID
-  async getContractById(id: string): Promise<ContractEntity | string> {
+  async getContractById(id: { id: string }): Promise<ContractEntity | string> {
     try {
       // CHECK IF HAS ID
       if (!id || id === undefined || id === null) return 'ID não encontrado';
