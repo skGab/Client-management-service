@@ -102,6 +102,7 @@ export class ContractRepositoryService implements ContractRepository {
     // SEARCH CONTRACTS ON DB BY DATE TIME
     const expiringContracts = await this.prisma.contract.findMany({
       select: {
+        id: true,
         cnpj_cpf: true,
         email_contato: true,
         tipo: true,
@@ -134,6 +135,7 @@ export class ContractRepositoryService implements ContractRepository {
     const expiringContractVo = expiringContracts.map(
       (contract) =>
         new ExpiringContractVo(
+          contract.id,
           contract.cnpj_cpf,
           contract.email_contato,
           contract.tipo,

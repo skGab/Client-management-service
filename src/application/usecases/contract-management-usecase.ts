@@ -71,6 +71,7 @@ export class ContractManagementUsecase {
     const expiringDto = expiringContracts.map(
       (contract) =>
         new ExpiringContractDto(
+          contract.getId(),
           contract.cnpj_cpf,
           contract.email_contato,
           contract.tipo,

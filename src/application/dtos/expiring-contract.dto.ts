@@ -1,5 +1,6 @@
 export class ExpiringContractDto {
   constructor(
+    public id: string,
     public cnpj_cpf: string,
     public email_contato: string,
     public tipo: string,
