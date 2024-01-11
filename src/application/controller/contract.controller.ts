@@ -26,6 +26,12 @@ export class ContractController {
   //   return this.clientManagementUsecase.findAll();
   // }
 
+  // EXPIRING CONTRACTS
+  @Get('expiring')
+  expiringContracts() {
+    return this.contractManagementUsecase.expiring();
+  }
+
   // GET CONTRACT BY ID
   @Get(':id')
   getContractById(@Param() id: { id: string }) {
@@ -34,7 +40,6 @@ export class ContractController {
 
   // CREATE A CLIENT
   @Post('registration')
-
   // VALIDATION PIPE
   @UsePipes(new ZodValidationPipe(ContractRegistrationDto))
   async registerContract(
@@ -54,10 +59,4 @@ export class ContractController {
   // deleteClient(@Body() clientRegistrationDto: ClientRegistrationDto) {
   //   return this.clientManagementUsecase.create(clientRegistrationDto);
   // }
-
-  // EXPIRING CONTRACTS
-  @Get('expiring')
-  expiringContracts() {
-    return this.contractManagementUsecase.expiring();
-  }
 }

@@ -18,14 +18,15 @@ export class ClientManagementUsecase {
 
   // FIND CLIENT BY ID
   async findById(id: string): Promise<ClientEntity | string> {
-    // I CAN RETURN A CLIENT DTO INSTEAD
     try {
+      // CHECK IF HAS CLIENT ID
       if (!id || id === null || id === undefined)
         return 'ID não encontrado na requisição';
 
       // GET CLIENT
       const client = await this.clientRepositoryService.findOne(id);
 
+      // CHECK IF HAS CLIENT
       if (!client || client === undefined || client === null)
         return 'Cliente não encontrado';
 
@@ -37,31 +38,39 @@ export class ClientManagementUsecase {
   }
 
   // GET CLIENTS
-  async findAll() {
-    const clients = await this.clientRepositoryService.findAll();
+  async findAll(): Promise<ClientFieldsDto[] | { message: string }> {
+    try {
+      // MAKE THE REQUEST TO THE DB
+      const clients = await this.clientRepositoryService.findAll();
 
-    if (clients === null)
-      return { message: 'Nenhum cliente registrado no banco' };
+      // CHECK IF HAS CLIENTS
+      if (clients === null)
+        return { message: 'Nenhum cliente registrado no banco' };
 
-    // MAPPING VALUE OBJECT TO DTO
-    const dto = clients.map(
-      (client) =>
-        new ClientFieldsDto(
-          client.id,
-          client.nome_fantasia,
-          client.email,
-          client.ddd,
-          client.telefone,
-          this.manageClientStatus.run(client),
-        ),
-    );
+      // MAPPING VALUE OBJECT TO DTO
+      const dto = clients.map(
+        (client) =>
+          new ClientFieldsDto(
+            client.id,
+            client.nome_fantasia,
+            client.email,
+            client.ddd,
+            client.telefone,
+            this.manageClientStatus.run(client),
+          ),
+      );
 
-    // RETURN CLIENT DTO
-    return dto;
+      // RETURN CLIENT DTO
+      return dto;
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 
   // CREATE CLIENTS
-  async create(registrationFormDto: (typeof ClientRegistrationDto)['_input']) {
+  async create(
+    registrationFormDto: (typeof ClientRegistrationDto)['_input'],
+  ): Promise<string> {
     try {
       // CONVERT DTO FORM TO ENTITY
       const registrationForm =
@@ -74,7 +83,6 @@ export class ClientManagementUsecase {
       return await this.clientRepositoryService.create(clientEntity);
     } catch (error) {
       this.logger.error(error.message);
-      return error;
     }
   }
 }
