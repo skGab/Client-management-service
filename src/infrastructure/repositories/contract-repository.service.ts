@@ -138,8 +138,8 @@ export class ContractRepositoryService implements ContractRepository {
           contract.cnpj_cpf,
           contract.email_contato,
           contract.tipo,
-          contract.termino_vigencia,
           contract.data_vencimento,
+          contract.termino_vigencia,
         ),
     );
 
