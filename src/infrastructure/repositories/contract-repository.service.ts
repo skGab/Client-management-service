@@ -25,6 +25,7 @@ export class ContractRepositoryService implements ContractRepository {
 
       // MAP THE OBJECT TO ENTITY
       const contractEntity = new ContractEntity({
+        id: id.id,
         cliente_novo: contracts.cliente_novo,
         cnpj_cpf: contracts.cnpj_cpf,
         razao_social: contracts.razao_social,
@@ -127,8 +128,6 @@ export class ContractRepositoryService implements ContractRepository {
         ],
       },
     });
-
-    console.log(expiringContracts);
 
     // MAP THE RESPONSE TO VO OBJECT
     const expiringContractVo = expiringContracts.map(

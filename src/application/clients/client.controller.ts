@@ -19,7 +19,7 @@ export class ClientController {
   }
 
   // // GET CLIENT BY ID
-  @Get(':id')
+  @Get('one/:id')
   getClientById(@Param('id') id: string): Promise<ClientEntity | string> {
     return this.clientManagementUsecase.findById(id);
   }
