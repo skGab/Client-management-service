@@ -146,6 +146,7 @@ export class ContractRepositoryService implements ContractRepository {
     // RETURN THE VO
     return expiringContractVo;
   }
+
   // update(): void {
   //   throw new Error('Method not implemented.');
   // }

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ClientController } from './controller/client.controller';
-import { ClientManagementUsecase } from './usecases/client-management-usecase';
+import { ClientController } from './clients/client.controller';
+import { ClientManagementUsecase } from './clients/client-management-usecase';
 import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
-import { ContractController } from './controller/contract.controller';
-import { ContractManagementUsecase } from './usecases/contract-management-usecase';
+import { ContractController } from './contracts/contract.controller';
+import { ContractManagementUsecase } from './contracts/contract-management-usecase';
 import { EntityFactoryService } from './factory/entity-factory.service';
-import { ManageClientStatus } from './services/manage-client-status.service';
+import { ManageClientStatus } from './clients/manage-client-status.service';
 
 @Module({
   imports: [InfrastructureModule],

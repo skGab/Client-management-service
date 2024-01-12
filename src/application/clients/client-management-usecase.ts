@@ -1,10 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { EntityFactoryService } from './../factory/entity-factory.service';
-import { ClientRegistrationDto } from '../dtos/client-registration.dto';
+import { EntityFactoryService } from '../factory/entity-factory.service';
+import { ClientRegistrationDto } from './dtos/client-registration.dto';
 import { ClientRepository } from 'src/domain/repository/client.repository';
 import { ClientEntity } from 'src/domain/entity/client.entity';
-import { ClientFieldsDto } from '../dtos/client-fields.dto';
-import { ManageClientStatus } from '../services/manage-client-status.service';
+import { ClientFieldsDto } from './dtos/client-fields.dto';
+import { ManageClientStatus } from './manage-client-status.service';
 
 @Injectable()
 export class ClientManagementUsecase {
