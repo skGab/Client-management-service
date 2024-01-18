@@ -42,7 +42,7 @@ export class ContractController {
   }
 
   // GET CONTRACT BY ID
-  @Get('one/:id')
+  @Get('findOne/:id')
   async contractById(@Param() id: { id: string }) {
     return await this.contractManagementUsecase.getContractById(id);
   }

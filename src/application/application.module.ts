@@ -5,7 +5,7 @@ import { InfrastructureModule } from 'src/infrastructure/infrastructure.module';
 import { ContractController } from './contracts/contract.controller';
 import { ContractManagementUsecase } from './contracts/contract-management-usecase';
 import { EntityFactoryService } from './factory/entity-factory.service';
-import { ManageClientStatus } from './clients/manage-client-status.service';
+import { ManageClientStatus } from './clients/services/manage-client-status.service';
 
 @Module({
   imports: [InfrastructureModule],

@@ -18,87 +18,87 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   ): Prisma.ClientCreateInput {
     return {
       id: clientEntity.getId(),
-      razao_social: clientEntity.clientContract.razao_social,
-      nome_fantasia: clientEntity.clientContract.nome_fantasia,
-      site: clientEntity.clientContract.site,
-      cnpj_cpf: clientEntity.clientContract.cnpj_cpf,
-      insc_estadual: clientEntity.clientContract.insc_estadual,
-      email: clientEntity.clientContract.email,
+      razao_social: clientEntity.client.razao_social,
+      nome_fantasia: clientEntity.client.nome_fantasia,
+      site: clientEntity.client.site,
+      cnpj_cpf: clientEntity.client.cnpj_cpf,
+      insc_estadual: clientEntity.client.insc_estadual,
+      email: clientEntity.client.email,
 
       //   INFO ATENDIMENTO
-      endereco_atendimento: clientEntity.clientContract.endereco_atendimento,
-      bairro: clientEntity.clientContract.bairro,
-      cep: clientEntity.clientContract.cep,
-      cidade: clientEntity.clientContract.cidade,
-      estado: clientEntity.clientContract.estado,
-      ddd: clientEntity.clientContract.ddd,
-      fax: clientEntity.clientContract.fax,
-      telefone: clientEntity.clientContract.telefone,
+      endereco_atendimento: clientEntity.client.endereco_atendimento,
+      bairro: clientEntity.client.bairro,
+      cep: clientEntity.client.cep,
+      cidade: clientEntity.client.cidade,
+      estado: clientEntity.client.estado,
+      ddd: clientEntity.client.ddd,
+      fax: clientEntity.client.fax,
+      telefone: clientEntity.client.telefone,
 
       //   INFO FATURAMENTO
-      endereco_faturamento: clientEntity.clientContract.endereco_faturamento,
-      bairro_faturamento: clientEntity.clientContract.bairro_faturamento,
-      cep_faturamento: clientEntity.clientContract.cep_faturamento,
-      cidade_faturamento: clientEntity.clientContract.cidade_faturamento,
-      estado_faturamento: clientEntity.clientContract.estado_faturamento,
-      ddd_faturamento: clientEntity.clientContract.ddd_faturamento,
-      fax_faturamento: clientEntity.clientContract.fax_faturamento,
-      telefone_faturamento: clientEntity.clientContract.telefone_faturamento,
+      endereco_faturamento: clientEntity.client.endereco_faturamento,
+      bairro_faturamento: clientEntity.client.bairro_faturamento,
+      cep_faturamento: clientEntity.client.cep_faturamento,
+      cidade_faturamento: clientEntity.client.cidade_faturamento,
+      estado_faturamento: clientEntity.client.estado_faturamento,
+      ddd_faturamento: clientEntity.client.ddd_faturamento,
+      fax_faturamento: clientEntity.client.fax_faturamento,
+      telefone_faturamento: clientEntity.client.telefone_faturamento,
 
       //   RESPONSAVEL FINANCEIRO
       responsavel_financeiro:
-        clientEntity.clientContract.responsavel_financeiro,
-      ddd_financeiro: clientEntity.clientContract.ddd_financeiro,
-      telefone_financeiro: clientEntity.clientContract.telefone_financeiro,
-      email_financeiro: clientEntity.clientContract.email_financeiro,
+        clientEntity.client.responsavel_financeiro,
+      ddd_financeiro: clientEntity.client.ddd_financeiro,
+      telefone_financeiro: clientEntity.client.telefone_financeiro,
+      email_financeiro: clientEntity.client.email_financeiro,
 
       // REPRESENTANTE LEGAL
-      nome_representante: clientEntity.clientContract.nome_representante,
+      nome_representante: clientEntity.client.nome_representante,
       estado_civil_representante:
-        clientEntity.clientContract.estado_civil_representante,
+        clientEntity.client.estado_civil_representante,
       profissao_representante:
-        clientEntity.clientContract.profissao_representante,
-      rg_representante: clientEntity.clientContract.rg_representante,
-      cpf_representante: clientEntity.clientContract.cpf_representante,
-      email_representante: clientEntity.clientContract.email_representante,
+        clientEntity.client.profissao_representante,
+      rg_representante: clientEntity.client.rg_representante,
+      cpf_representante: clientEntity.client.cpf_representante,
+      email_representante: clientEntity.client.email_representante,
       telefone_representante:
-        clientEntity.clientContract.telefone_representante,
+        clientEntity.client.telefone_representante,
       nascimento_representante:
-        clientEntity.clientContract.nascimento_representante,
+        clientEntity.client.nascimento_representante,
 
       // INFO BOLETOS E NOTAS FISCAIS
-      email_boleto_notas: clientEntity.clientContract.email_boleto_notas,
+      email_boleto_notas: clientEntity.client.email_boleto_notas,
 
       // TESTEMUNHA / SEGUNDO CONTATO
-      nome_segundo_contato: clientEntity.clientContract.nome_segundo_contato,
+      nome_segundo_contato: clientEntity.client.nome_segundo_contato,
       estado_civil_segundo_contato:
-        clientEntity.clientContract.estado_civil_segundo_contato,
+        clientEntity.client.estado_civil_segundo_contato,
       profissao_segundo_contato:
-        clientEntity.clientContract.profissao_segundo_contato,
-      rg_segundo_contato: clientEntity.clientContract.rg_segundo_contato,
-      cpf_segundo_contato: clientEntity.clientContract.cpf_segundo_contato,
+        clientEntity.client.profissao_segundo_contato,
+      rg_segundo_contato: clientEntity.client.rg_segundo_contato,
+      cpf_segundo_contato: clientEntity.client.cpf_segundo_contato,
       email_segundo_contato:
-        clientEntity.clientContract.email_segundo_contato,
+        clientEntity.client.email_segundo_contato,
       telefone_segundo_contato:
-        clientEntity.clientContract.telefone_segundo_contato,
+        clientEntity.client.telefone_segundo_contato,
       nascimento_segundo_contato:
-        clientEntity.clientContract.nascimento_segundo_contato,
+        clientEntity.client.nascimento_segundo_contato,
 
       // TERCEIRO CONTATO
       nome_terceiro_contato:
-        clientEntity.clientContract.nome_terceiro_contato,
+        clientEntity.client.nome_terceiro_contato,
       estado_civil_terceiro_contato:
-        clientEntity.clientContract.estado_civil_terceiro_contato,
+        clientEntity.client.estado_civil_terceiro_contato,
       profissao_terceiro_contato:
-        clientEntity.clientContract.profissao_terceiro_contato,
-      rg_terceiro_contato: clientEntity.clientContract.rg_terceiro_contato,
-      cpf_terceiro_contato: clientEntity.clientContract.cpf_terceiro_contato,
+        clientEntity.client.profissao_terceiro_contato,
+      rg_terceiro_contato: clientEntity.client.rg_terceiro_contato,
+      cpf_terceiro_contato: clientEntity.client.cpf_terceiro_contato,
       email_terceiro_contato:
-        clientEntity.clientContract.email_terceiro_contato,
+        clientEntity.client.email_terceiro_contato,
       telefone_terceiro_contato:
-        clientEntity.clientContract.telefone_terceiro_contato,
+        clientEntity.client.telefone_terceiro_contato,
       nascimento_terceiro_contato:
-        clientEntity.clientContract.nascimento_terceiro_contato,
+        clientEntity.client.nascimento_terceiro_contato,
     };
   }
 
@@ -108,35 +108,35 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   ): Prisma.ContractCreateInput {
     return {
       id: contractEntity.getId(),
-      cliente_novo: contractEntity.contractRegistration.cliente_novo,
-      cnpj_cpf: contractEntity.contractRegistration.cnpj_cpf,
-      razao_social: contractEntity.contractRegistration.razao_social,
-      nome_fantasia: contractEntity.contractRegistration.nome_fantasia,
-      nome_contato: contractEntity.contractRegistration.nome_contato,
-      email_contato: contractEntity.contractRegistration.email_contato,
+      cliente_novo: contractEntity.contract.cliente_novo,
+      cnpj_cpf: contractEntity.contract.cnpj_cpf,
+      razao_social: contractEntity.contract.razao_social,
+      nome_fantasia: contractEntity.contract.nome_fantasia,
+      nome_contato: contractEntity.contract.nome_contato,
+      email_contato: contractEntity.contract.email_contato,
       servicos_prestados:
-        contractEntity.contractRegistration.servicos_prestados,
-      emissao_de_nota: contractEntity.contractRegistration.emissao_de_nota,
+        contractEntity.contract.servicos_prestados,
+      emissao_de_nota: contractEntity.contract.emissao_de_nota,
       retencao_iss_emissao_nota_fiscal:
-        contractEntity.contractRegistration.retencao_iss_emissao_nota_fiscal,
-      forma_recebimento: contractEntity.contractRegistration.forma_recebimento,
-      tipo: contractEntity.contractRegistration.tipo,
+        contractEntity.contract.retencao_iss_emissao_nota_fiscal,
+      forma_recebimento: contractEntity.contract.forma_recebimento,
+      tipo: contractEntity.contract.tipo,
 
       // RECORRENTE
-      inicio_vigencia: contractEntity.contractRegistration.inicio_vigencia,
-      termino_vigencia: contractEntity.contractRegistration.termino_vigencia,
-      periodicidade: contractEntity.contractRegistration.periodicidade,
-      valor_do_periodo: contractEntity.contractRegistration.valor_do_periodo,
+      inicio_vigencia: contractEntity.contract.inicio_vigencia,
+      termino_vigencia: contractEntity.contract.termino_vigencia,
+      periodicidade: contractEntity.contract.periodicidade,
+      valor_do_periodo: contractEntity.contract.valor_do_periodo,
       observacoes_adicionais:
-        contractEntity.contractRegistration.observacoes_adicionais,
+        contractEntity.contract.observacoes_adicionais,
 
       // AVULSO
       valor_total_servicos:
-        contractEntity.contractRegistration.valor_total_servicos,
-      numero_parcelas: contractEntity.contractRegistration.numero_parcelas,
-      data_vencimento: contractEntity.contractRegistration.data_vencimento,
+        contractEntity.contract.valor_total_servicos,
+      numero_parcelas: contractEntity.contract.numero_parcelas,
+      data_vencimento: contractEntity.contract.data_vencimento,
       observacoes_adicionais_nota_fiscal:
-        contractEntity.contractRegistration.observacoes_adicionais_nota_fiscal,
+        contractEntity.contract.observacoes_adicionais_nota_fiscal,
 
       // CLIENT KEY
       Client: {

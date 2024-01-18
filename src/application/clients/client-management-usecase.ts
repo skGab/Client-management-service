@@ -4,7 +4,7 @@ import { ClientRegistrationDto } from './dtos/client-registration.dto';
 import { ClientRepository } from 'src/domain/repository/client.repository';
 import { ClientEntity } from 'src/domain/entity/client.entity';
 import { ClientFieldsDto } from './dtos/client-fields.dto';
-import { ManageClientStatus } from './manage-client-status.service';
+import { ManageClientStatus } from './services/manage-client-status.service';
 
 @Injectable()
 export class ClientManagementUsecase {

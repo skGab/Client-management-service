@@ -68,7 +68,7 @@ export class ContractRepositoryService implements ContractRepository {
         id: true,
       },
       where: {
-        cnpj_cpf: contractEntity.contractRegistration.cnpj_cpf,
+        cnpj_cpf: contractEntity.contract.cnpj_cpf,
       },
     });
 
