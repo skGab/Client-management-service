@@ -41,7 +41,7 @@ export class ManageClientStatus {
       if (status.includes('ativo')) {
         return 'ativo';
       } else if (contractTypes.includes('avulso')) {
-        return 'avulso';
+        return 'ativo';
       }
 
       return 'inativo';

@@ -1,9 +1,11 @@
-import { ContractRegistrationDto } from './../dtos/contract-registration.dto';
-import { EntityFactoryService } from './../factory/entity-factory.service';
+import { ContractRegistrationDto } from './dtos/contract-registration.dto';
+import { EntityFactoryService } from '../factory/entity-factory.service';
 import { Injectable, Logger } from '@nestjs/common';
 import { ContractEntity } from 'src/domain/entity/contract.entity';
 import { ContractRepository } from 'src/domain/repository/contract.repository';
-import { ExpiringContractDto } from '../dtos/expiring-contract.dto';
+import { ExpiringContractDto } from './dtos/expiring-contract.dto';
+import { ContractItemsDto } from './dtos/contract-items.dto';
+import { ItemsInformationVo } from 'src/domain/valueObject/items-information.vo';
 
 @Injectable()
 export class ContractManagementUsecase {
@@ -14,15 +16,55 @@ export class ContractManagementUsecase {
     private entityFactoryService: EntityFactoryService,
   ) {}
 
-  // GET
-  // findAll() {
-  //   return this.clientRepositoryService.findAll();
+  // // GET CONTRACT ITEMS
+  // async getItems(clientId: string): Promise<ContractItemsDto[] | string> {
+  //   // GET THE DATA FROM THE DB
+  //   const response =
+  //     await this.contractRepositoryService.getItemsInformation(clientId);
 
-  //   // const  =
-  //   // const response = .map((client: ClientDto) => {
-  //   //   return {};
-  //   // });
+  //   function periodicidadeChecker(info: ItemsInformationVo): number {
+  //     switch (info.periodicidade) {
+  //       case 'mensal':
+  //         return 1;
+  //       case 'bimestral':
+  //         return 2;
+  //       case 'trimestral':
+  //         return 3;
+  //       case 'semestral':
+  //         return 6;
+
+  //       default:
+  //         return 0; // or a default value
+  //     }
+  //   }
+
+  //   // PUT THE RESPONSE ON THE DTO OBJECT
+  //   const servicos = response.map((info) => {
+  //     const servicosAvulsos = [];
+
+  //     return {
+  //       nome: info.servicos_prestados,
+  //       // IF THE CONTRACT HAS "AVULSO" TYPE, SO THE NUMBER OF THE CONTRACTS FOUND REPRESENTS THE AMOUT OF SERVICES
+  //       // IF THE CONTRACTS HAS "RECORRENTE" TYPE, SÓ THE NUMBER OF SERVICES IS BASED ON THE "PERIODICIDADE" FIELD
+  //       quantidade: info.tipo === 'recorrente' ? periodicidadeChecker(info) : 1,
+  //     };
+  //   });
+
+  //   // DTO MAP
+  //   const itemsDto = servicos.map((servico) => {
+  //     return new ContractItemsDto(servico);
+  //   });
+
+  //   // RETURN THE DATA
+  //   return itemsDto;
   // }
+
+  // GET ALL CONTRACTS BY ID
+  async getAllContractsById(clientId: string) {
+    // GET CONTRACTS
+    // MAP TO DTO
+    // RETURN THE DTO
+  }
 
   // GET CONTRACT BY ID
   async getContractById(id: { id: string }): Promise<ContractEntity | string> {
@@ -38,7 +80,7 @@ export class ContractManagementUsecase {
   }
 
   // CREATE CONTRACT
-  async create(
+  async createContract(
     contractRegistrationDto: (typeof ContractRegistrationDto)['_input'],
   ): Promise<string> {
     try {
@@ -59,7 +101,7 @@ export class ContractManagementUsecase {
   }
 
   // RETURN EXPIRING CONRACTS
-  async expiring(): Promise<ExpiringContractDto[] | string> {
+  async getExpiring(): Promise<ExpiringContractDto[] | string> {
     // GET CONTRACTS
     const expiringContracts =
       await this.contractRepositoryService.getExpiring();

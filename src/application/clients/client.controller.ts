@@ -1,8 +1,8 @@
-import { ClientRegistrationDto } from '../dtos/client-registration.dto';
+import { ClientRegistrationDto } from './dtos/client-registration.dto';
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
-import { ClientManagementUsecase } from '../usecases/client-management-usecase';
+import { ClientManagementUsecase } from './client-management-usecase';
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
-import { ClientFieldsDto } from '../dtos/client-fields.dto';
+import { ClientFieldsDto } from './dtos/client-fields.dto';
 import { ClientEntity } from 'src/domain/entity/client.entity';
 
 // DRIVING ADAPTER
@@ -18,8 +18,8 @@ export class ClientController {
     return await this.clientManagementUsecase.findAll();
   }
 
-  // // GET CLIENT BY ID
-  @Get(':id')
+  // GET CLIENT BY ID
+  @Get('findOne/:id')
   getClientById(@Param('id') id: string): Promise<ClientEntity | string> {
     return this.clientManagementUsecase.findById(id);
   }

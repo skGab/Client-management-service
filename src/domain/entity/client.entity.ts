@@ -1,6 +1,8 @@
+import { ContractEntity } from './contract.entity';
 import { MainEntity } from './main.entity';
 
-export interface ClientContract {
+export interface Client {
+  id?:string,
   razao_social: string;
   nome_fantasia: string;
   site: string;
@@ -68,7 +70,10 @@ export interface ClientContract {
   nascimento_terceiro_contato: string;
 }
 export class ClientEntity extends MainEntity {
-  constructor(public clientContract: ClientContract) {
-    super();
+  constructor(
+    public client: Client,
+    public contractEntity?: ContractEntity[],
+  ) {
+    super(client.id);
   }
 }

@@ -1,6 +1,7 @@
 import { MainEntity } from './main.entity';
 
-export interface ContractRegistration {
+export interface Contract {
+  id?: string;
   cliente_novo: boolean;
   cnpj_cpf: string;
   razao_social?: string;
@@ -28,7 +29,7 @@ export interface ContractRegistration {
 }
 
 export class ContractEntity extends MainEntity {
-  constructor(public contractRegistration: ContractRegistration) {
-    super();
+  constructor(public contract: Contract) {
+    super(contract.id);
   }
 }
