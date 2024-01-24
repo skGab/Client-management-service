@@ -33,6 +33,10 @@ const BillingInfoSchema = z.object({
   fax_faturamento: z.string(),
   telefone_faturamento: z.string(),
 
+  emissao_nota: z.string(),
+  retencao_iss: z.string(),
+  forma_recebimento: z.string(),
+
   // INFO BOLETOS E NOTAS FISCAIS
   email_boleto_notas: z.string(),
 });
@@ -81,7 +85,7 @@ const AdditionalContactsSchema = z.object({
 });
 
 // REGISTRATION SCHEMA
-export const ClientRegistrationDto = z
+export const ClientCnpjRegistrationDto = z
   .object({
     basicInfo: BasicInfoSchema,
     contactInfo: ContactInfoSchema,

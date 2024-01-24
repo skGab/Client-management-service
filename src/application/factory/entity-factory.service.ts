@@ -1,7 +1,7 @@
 import { ContractRegistrationDto } from '../contracts/dtos/contract-registration.dto';
 import { ContractRegistration } from 'src/domain/entity/contract.entity';
 import { ClientContract } from 'src/domain/entity/client.entity';
-import { ClientRegistrationDto } from '../clients/dtos/client-registration.dto';
+import { ClientCnpjRegistrationDto } from '../clients/dtos/client-cnpj-registration.dto';
 
 export class EntityFactoryService {
   public mapContractEntity(
@@ -39,102 +39,95 @@ export class EntityFactoryService {
     };
   }
 
-  public mapClientEntity(
-    registrationFormDto: (typeof ClientRegistrationDto)['_input'],
+  public mapClientToEntity(
+    cnpjRegistration: (typeof ClientCnpjRegistrationDto)['_input'],
   ): ClientContract {
     return {
-      razao_social: registrationFormDto.basicInfo.razao_social,
-      nome_fantasia: registrationFormDto.basicInfo.nome_fantasia,
-      site: registrationFormDto.basicInfo.site,
-      cnpj_cpf: registrationFormDto.basicInfo.cnpj_cpf,
-      insc_estadual: registrationFormDto.basicInfo.insc_estadual,
-      email: registrationFormDto.basicInfo.email,
+      razao_social: cnpjRegistration.basicInfo.razao_social,
+      nome_fantasia: cnpjRegistration.basicInfo.nome_fantasia,
+      site: cnpjRegistration.basicInfo.site,
+      cnpj_cpf: cnpjRegistration.basicInfo.cnpj_cpf,
+      insc_estadual: cnpjRegistration.basicInfo.insc_estadual,
+      email: cnpjRegistration.basicInfo.email,
 
       //   INFO ATENDIMENTO
-      endereco_atendimento:
-        registrationFormDto.contactInfo.endereco_atendimento,
-      bairro: registrationFormDto.contactInfo.bairro,
-      cep: registrationFormDto.contactInfo.cep,
-      cidade: registrationFormDto.contactInfo.cidade,
-      estado: registrationFormDto.contactInfo.estado,
-      ddd: registrationFormDto.contactInfo.ddd,
-      fax: registrationFormDto.contactInfo.fax,
-      telefone: registrationFormDto.contactInfo.telefone,
+      endereco_atendimento: cnpjRegistration.contactInfo.endereco_atendimento,
+      bairro: cnpjRegistration.contactInfo.bairro,
+      cep: cnpjRegistration.contactInfo.cep,
+      cidade: cnpjRegistration.contactInfo.cidade,
+      estado: cnpjRegistration.contactInfo.estado,
+      ddd: cnpjRegistration.contactInfo.ddd,
+      fax: cnpjRegistration.contactInfo.fax,
+      telefone: cnpjRegistration.contactInfo.telefone,
 
       //   INFO FATURAMENTO
-      endereco_faturamento:
-        registrationFormDto.billingInfo.endereco_faturamento,
-      bairro_faturamento: registrationFormDto.billingInfo.bairro_faturamento,
-      cep_faturamento: registrationFormDto.billingInfo.cep_faturamento,
-      cidade_faturamento: registrationFormDto.billingInfo.cidade_faturamento,
-      estado_faturamento: registrationFormDto.billingInfo.estado_faturamento,
-      ddd_faturamento: registrationFormDto.billingInfo.ddd_faturamento,
-      fax_faturamento: registrationFormDto.billingInfo.fax_faturamento,
-      telefone_faturamento:
-        registrationFormDto.billingInfo.telefone_faturamento,
+      endereco_faturamento: cnpjRegistration.billingInfo.endereco_faturamento,
+      bairro_faturamento: cnpjRegistration.billingInfo.bairro_faturamento,
+      cep_faturamento: cnpjRegistration.billingInfo.cep_faturamento,
+      cidade_faturamento: cnpjRegistration.billingInfo.cidade_faturamento,
+      estado_faturamento: cnpjRegistration.billingInfo.estado_faturamento,
+      ddd_faturamento: cnpjRegistration.billingInfo.ddd_faturamento,
+      fax_faturamento: cnpjRegistration.billingInfo.fax_faturamento,
+      telefone_faturamento: cnpjRegistration.billingInfo.telefone_faturamento,
 
       //   RESPONSAVEL FINANCEIRO
       responsavel_financeiro:
-        registrationFormDto.finacialInfo.responsavel_financeiro,
-      ddd_financeiro: registrationFormDto.finacialInfo.ddd_financeiro,
-      telefone_financeiro: registrationFormDto.finacialInfo.telefone_financeiro,
-      email_financeiro: registrationFormDto.finacialInfo.email_financeiro,
+        cnpjRegistration.finacialInfo.responsavel_financeiro,
+      ddd_financeiro: cnpjRegistration.finacialInfo.ddd_financeiro,
+      telefone_financeiro: cnpjRegistration.finacialInfo.telefone_financeiro,
+      email_financeiro: cnpjRegistration.finacialInfo.email_financeiro,
 
       // REPRESENTANTE LEGAL
-      nome_representante: registrationFormDto.legalInfo.nome_representante,
+      nome_representante: cnpjRegistration.legalInfo.nome_representante,
       estado_civil_representante:
-        registrationFormDto.legalInfo.estado_civil_representante,
+        cnpjRegistration.legalInfo.estado_civil_representante,
       profissao_representante:
-        registrationFormDto.legalInfo.profissao_representante,
-      rg_representante: registrationFormDto.legalInfo.rg_representante,
-      cpf_representante: registrationFormDto.legalInfo.cpf_representante,
-      email_representante: registrationFormDto.legalInfo.email_representante,
-      telefone_representante:
-        registrationFormDto.legalInfo.telefone_representante,
+        cnpjRegistration.legalInfo.profissao_representante,
+      rg_representante: cnpjRegistration.legalInfo.rg_representante,
+      cpf_representante: cnpjRegistration.legalInfo.cpf_representante,
+      email_representante: cnpjRegistration.legalInfo.email_representante,
+      telefone_representante: cnpjRegistration.legalInfo.telefone_representante,
       nascimento_representante:
-        registrationFormDto.legalInfo.nascimento_representante,
+        cnpjRegistration.legalInfo.nascimento_representante,
 
       // INFO BOLETOS E NOTAS FISCAIS
-      email_boleto_notas: registrationFormDto.billingInfo.email_boleto_notas,
+      email_boleto_notas: cnpjRegistration.billingInfo.email_boleto_notas,
 
       // TESTEMUNHA / SEGUNDO CONTATO
       nome_segundo_contato:
-        registrationFormDto.AdditionalContactsSchema.nome_segundo_contato,
+        cnpjRegistration.AdditionalContactsSchema.nome_segundo_contato,
       estado_civil_segundo_contato:
-        registrationFormDto.AdditionalContactsSchema
-          .estado_civil_segundo_contato,
+        cnpjRegistration.AdditionalContactsSchema.estado_civil_segundo_contato,
       profissao_segundo_contato:
-        registrationFormDto.AdditionalContactsSchema.profissao_segundo_contato,
+        cnpjRegistration.AdditionalContactsSchema.profissao_segundo_contato,
       rg_segundo_contato:
-        registrationFormDto.AdditionalContactsSchema.rg_segundo_contato,
+        cnpjRegistration.AdditionalContactsSchema.rg_segundo_contato,
       cpf_segundo_contato:
-        registrationFormDto.AdditionalContactsSchema.cpf_segundo_contato,
+        cnpjRegistration.AdditionalContactsSchema.cpf_segundo_contato,
       email_segundo_contato:
-        registrationFormDto.AdditionalContactsSchema.email_segundo_contato,
+        cnpjRegistration.AdditionalContactsSchema.email_segundo_contato,
       telefone_segundo_contato:
-        registrationFormDto.AdditionalContactsSchema.telefone_segundo_contato,
+        cnpjRegistration.AdditionalContactsSchema.telefone_segundo_contato,
       nascimento_segundo_contato:
-        registrationFormDto.AdditionalContactsSchema.nascimento_segundo_contato,
+        cnpjRegistration.AdditionalContactsSchema.nascimento_segundo_contato,
 
       // TERCEIRO CONTATO
       nome_terceiro_contato:
-        registrationFormDto.AdditionalContactsSchema.nome_terceiro_contato,
+        cnpjRegistration.AdditionalContactsSchema.nome_terceiro_contato,
       estado_civil_terceiro_contato:
-        registrationFormDto.AdditionalContactsSchema
-          .estado_civil_terceiro_contato,
+        cnpjRegistration.AdditionalContactsSchema.estado_civil_terceiro_contato,
       profissao_terceiro_contato:
-        registrationFormDto.AdditionalContactsSchema.profissao_terceiro_contato,
+        cnpjRegistration.AdditionalContactsSchema.profissao_terceiro_contato,
       rg_terceiro_contato:
-        registrationFormDto.AdditionalContactsSchema.rg_terceiro_contato,
+        cnpjRegistration.AdditionalContactsSchema.rg_terceiro_contato,
       cpf_terceiro_contato:
-        registrationFormDto.AdditionalContactsSchema.cpf_terceiro_contato,
+        cnpjRegistration.AdditionalContactsSchema.cpf_terceiro_contato,
       email_terceiro_contato:
-        registrationFormDto.AdditionalContactsSchema.email_terceiro_contato,
+        cnpjRegistration.AdditionalContactsSchema.email_terceiro_contato,
       telefone_terceiro_contato:
-        registrationFormDto.AdditionalContactsSchema.telefone_terceiro_contato,
+        cnpjRegistration.AdditionalContactsSchema.telefone_terceiro_contato,
       nascimento_terceiro_contato:
-        registrationFormDto.AdditionalContactsSchema
-          .nascimento_terceiro_contato,
+        cnpjRegistration.AdditionalContactsSchema.nascimento_terceiro_contato,
     };
   }
 }

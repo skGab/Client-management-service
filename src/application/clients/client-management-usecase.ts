@@ -1,10 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EntityFactoryService } from '../factory/entity-factory.service';
-import { ClientRegistrationDto } from './dtos/client-registration.dto';
+import { ClientCnpjRegistrationDto } from './dtos/client-cnpj-registration.dto';
 import { ClientRepository } from 'src/domain/repository/client.repository';
 import { ClientEntity } from 'src/domain/entity/client.entity';
-import { ClientFieldsDto } from './dtos/client-fields.dto';
+import { ClientFieldsDto } from './dtos/clients-table.dto';
 import { ManageClientStatus } from './manage-client-status.service';
+import { ClientBasicDto } from './dtos/client-basic.dto';
 
 @Injectable()
 export class ClientManagementUsecase {
@@ -68,13 +69,32 @@ export class ClientManagementUsecase {
   }
 
   // CREATE CLIENTS
-  async create(
-    registrationFormDto: (typeof ClientRegistrationDto)['_input'],
+  async createClient(
+    clientBasicDto: (typeof ClientBasicDto)['_input'],
   ): Promise<string> {
     try {
       // CONVERT DTO FORM TO ENTITY
       const registrationForm =
-        this.entityFactoryService.mapClientEntity(registrationFormDto);
+        this.entityFactoryService.mapClientToEntity(clientBasicDto);
+
+      // CREATE CLIENT ENTITY
+      const clientEntity = new ClientEntity(registrationForm);
+
+      // SAVE ON THE DB
+      return await this.clientRepositoryService.create(clientEntity);
+    } catch (error) {
+      this.logger.error(error.message);
+    }
+  }
+
+  // CREATE CLIENTS
+  async createCnpj(
+    registrationFormDto: (typeof ClientCnpjRegistrationDto)['_input'],
+  ): Promise<string> {
+    try {
+      // CONVERT DTO FORM TO ENTITY
+      const registrationForm =
+        this.entityFactoryService.mapClientToEntity(registrationFormDto);
 
       // CREATE CLIENT ENTITY
       const clientEntity = new ClientEntity(registrationForm);

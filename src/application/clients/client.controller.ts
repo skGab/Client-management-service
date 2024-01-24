@@ -1,9 +1,10 @@
-import { ClientRegistrationDto } from './dtos/client-registration.dto';
+import { ClientCnpjRegistrationDto } from './dtos/client-cnpj-registration.dto';
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
 import { ClientManagementUsecase } from './client-management-usecase';
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
-import { ClientFieldsDto } from './dtos/client-fields.dto';
+import { ClientFieldsDto } from './dtos/clients-table.dto';
 import { ClientEntity } from 'src/domain/entity/client.entity';
+import { ClientBasicDto } from './dtos/client-basic.dto';
 
 // DRIVING ADAPTER
 @Controller('clients')
@@ -24,25 +25,21 @@ export class ClientController {
     return this.clientManagementUsecase.findById(id);
   }
 
-  // CREATE A CLIENT
-  @Post('registration')
-  // VALIDATION PIPE
-  @UsePipes(new ZodValidationPipe(ClientRegistrationDto))
-  async registerClient(
-    @Body() clientRegistrationDto: (typeof ClientRegistrationDto)['_input'],
+  // BASIC CLIENT REGISTRATION
+  @Post('basic/registration')
+  @UsePipes(new ZodValidationPipe(ClientBasicDto))
+  async basicRegistration(
+    @Body() clientBasicDto: (typeof ClientBasicDto)['_input'],
+  ) {
+    return await this.clientManagementUsecase.create(clientBasicDto);
+  }
+
+  // CLIENT CNPJ REGISTRATION
+  @Post('cnpj/registration')
+  @UsePipes(new ZodValidationPipe(ClientCnpjRegistrationDto))
+  async clientCnpjRegistration(
+    @Body() clientRegistrationDto: (typeof ClientCnpjRegistrationDto)['_input'],
   ) {
     return await this.clientManagementUsecase.create(clientRegistrationDto);
   }
-
-  // // UPDATE CLIENT
-  // @Put()
-  // updateClient(@Body() clientRegistrationDto: ClientRegistrationDto) {
-  //   return this.clientManagementUsecase.create(clientRegistrationDto);
-  // }
-
-  // // DELETE CLIENT
-  // @Delete()
-  // deleteClient(@Body() clientRegistrationDto: ClientRegistrationDto) {
-  //   return this.clientManagementUsecase.create(clientRegistrationDto);
-  // }
 }
