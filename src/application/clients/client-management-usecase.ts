@@ -3,9 +3,14 @@ import { EntityFactoryService } from '../factory/entity-factory.service';
 import { ClientCnpjRegistrationDto } from './dtos/client-cnpj-registration.dto';
 import { ClientRepository } from 'src/domain/repository/client.repository';
 import { ClientEntity } from 'src/domain/entity/client.entity';
+<<<<<<< HEAD
 import { ClientFieldsDto } from './dtos/clients-table.dto';
 import { ManageClientStatus } from './manage-client-status.service';
 import { ClientBasicDto } from './dtos/client-basic.dto';
+=======
+import { ClientFieldsDto } from './dtos/client-fields.dto';
+import { ManageClientStatus } from './services/manage-client-status.service';
+>>>>>>> 22fdb40934b4495725ee2648030b6d6c631cedf1
 
 @Injectable()
 export class ClientManagementUsecase {

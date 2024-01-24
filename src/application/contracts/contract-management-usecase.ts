@@ -16,47 +16,54 @@ export class ContractManagementUsecase {
     private entityFactoryService: EntityFactoryService,
   ) {}
 
-  // GET CONTRACT ITEMS
-  async getItems(clientId: string): Promise<ContractItemsDto[] | string> {
-    // GET THE DATA FROM THE DB
-    const response =
-      await this.contractRepositoryService.getItemsInformation(clientId);
+  // // GET CONTRACT ITEMS
+  // async getItems(clientId: string): Promise<ContractItemsDto[] | string> {
+  //   // GET THE DATA FROM THE DB
+  //   const response =
+  //     await this.contractRepositoryService.getItemsInformation(clientId);
 
-    function periodicidadeChecker(info: ItemsInformationVo): number {
-      switch (info.periodicidade) {
-        case 'mensal':
-          return 1;
-        case 'bimestral':
-          return 2;
-        case 'trimestral':
-          return 3;
-        case 'semestral':
-          return 6;
+  //   function periodicidadeChecker(info: ItemsInformationVo): number {
+  //     switch (info.periodicidade) {
+  //       case 'mensal':
+  //         return 1;
+  //       case 'bimestral':
+  //         return 2;
+  //       case 'trimestral':
+  //         return 3;
+  //       case 'semestral':
+  //         return 6;
 
-        default:
-          return 0; // or a default value
-      }
-    }
+  //       default:
+  //         return 0; // or a default value
+  //     }
+  //   }
 
-    // PUT THE RESPONSE ON THE DTO OBJECT
-    const servicos = response.map((info) => {
-      const servicosAvulsos = [];
+  //   // PUT THE RESPONSE ON THE DTO OBJECT
+  //   const servicos = response.map((info) => {
+  //     const servicosAvulsos = [];
 
-      return {
-        nome: info.servicos_prestados,
-        // IF THE CONTRACT HAS "AVULSO" TYPE, SO THE NUMBER OF THE CONTRACTS FOUND REPRESENTS THE AMOUT OF SERVICES
-        // IF THE CONTRACTS HAS "RECORRENTE" TYPE, SÓ THE NUMBER OF SERVICES IS BASED ON THE "PERIODICIDADE" FIELD
-        quantidade: info.tipo === 'recorrente' ? periodicidadeChecker(info) : 1,
-      };
-    });
+  //     return {
+  //       nome: info.servicos_prestados,
+  //       // IF THE CONTRACT HAS "AVULSO" TYPE, SO THE NUMBER OF THE CONTRACTS FOUND REPRESENTS THE AMOUT OF SERVICES
+  //       // IF THE CONTRACTS HAS "RECORRENTE" TYPE, SÓ THE NUMBER OF SERVICES IS BASED ON THE "PERIODICIDADE" FIELD
+  //       quantidade: info.tipo === 'recorrente' ? periodicidadeChecker(info) : 1,
+  //     };
+  //   });
 
-    // DTO MAP
-    const itemsDto = servicos.map((servico) => {
-      return new ContractItemsDto(servico);
-    });
+  //   // DTO MAP
+  //   const itemsDto = servicos.map((servico) => {
+  //     return new ContractItemsDto(servico);
+  //   });
 
-    // RETURN THE DATA
-    return itemsDto;
+  //   // RETURN THE DATA
+  //   return itemsDto;
+  // }
+
+  // GET ALL CONTRACTS BY ID
+  async getAllContractsById(clientId: string) {
+    // GET CONTRACTS
+    // MAP TO DTO
+    // RETURN THE DTO
   }
 
   // GET CONTRACT BY ID

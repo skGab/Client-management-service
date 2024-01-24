@@ -21,13 +21,13 @@ export class ContractController {
     private readonly contractManagementUsecase: ContractManagementUsecase,
   ) {}
 
-  // CONTRACT ITEMS
-  @Get('items')
-  async items(
-    @Param() clientId: { id: string },
-  ): Promise<ContractItemsDto | string> {
-    return await this.contractManagementUsecase.getItems(clientId.id);
-  }
+  // // CONTRACT ITEMS
+  // @Get('items')
+  // async items(
+  //   @Param() clientId: { id: string },
+  // ): Promise<ContractItemsDto | string> {
+  //   return await this.contractManagementUsecase.getItems(clientId.id);
+  // }
 
   // EXPIRING CONTRACTS
   @Get('expiring')
@@ -35,8 +35,14 @@ export class ContractController {
     return await this.contractManagementUsecase.getExpiring();
   }
 
+  // GET ALL CONTRACTS BY ID
+  @Get('all/:id')
+  async allContractsById(@Param() clientId: { id: string }) {
+    return await this.contractManagementUsecase.getAllContractsById(clientId.id);
+  }
+
   // GET CONTRACT BY ID
-  @Get(':id')
+  @Get('findOne/:id')
   async contractById(@Param() id: { id: string }) {
     return await this.contractManagementUsecase.getContractById(id);
   }

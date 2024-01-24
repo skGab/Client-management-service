@@ -19,8 +19,8 @@ export class ClientController {
     return await this.clientManagementUsecase.findAll();
   }
 
-  // // GET CLIENT BY ID
-  @Get(':id')
+  // GET CLIENT BY ID
+  @Get('findOne/:id')
   getClientById(@Param('id') id: string): Promise<ClientEntity | string> {
     return this.clientManagementUsecase.findById(id);
   }

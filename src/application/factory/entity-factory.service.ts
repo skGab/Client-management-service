@@ -1,12 +1,18 @@
 import { ContractRegistrationDto } from '../contracts/dtos/contract-registration.dto';
+<<<<<<< HEAD
 import { ContractRegistration } from 'src/domain/entity/contract.entity';
 import { ClientContract } from 'src/domain/entity/client.entity';
 import { ClientCnpjRegistrationDto } from '../clients/dtos/client-cnpj-registration.dto';
+=======
+import { Contract } from 'src/domain/entity/contract.entity';
+import { Client } from 'src/domain/entity/client.entity';
+import { ClientRegistrationDto } from '../clients/dtos/client-registration.dto';
+>>>>>>> 22fdb40934b4495725ee2648030b6d6c631cedf1
 
 export class EntityFactoryService {
   public mapContractEntity(
     contractRegistrationDto: (typeof ContractRegistrationDto)['_input'],
-  ): ContractRegistration {
+  ): Contract {
     return {
       cliente_novo: contractRegistrationDto.cliente_novo,
       cnpj_cpf: contractRegistrationDto.cnpj_cpf,
@@ -39,9 +45,15 @@ export class EntityFactoryService {
     };
   }
 
+<<<<<<< HEAD
   public mapClientToEntity(
     cnpjRegistration: (typeof ClientCnpjRegistrationDto)['_input'],
   ): ClientContract {
+=======
+  public mapClientEntity(
+    registrationFormDto: (typeof ClientRegistrationDto)['_input'],
+  ): Client {
+>>>>>>> 22fdb40934b4495725ee2648030b6d6c631cedf1
     return {
       razao_social: cnpjRegistration.basicInfo.razao_social,
       nome_fantasia: cnpjRegistration.basicInfo.nome_fantasia,
