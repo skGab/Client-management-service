@@ -1,9 +1,11 @@
+import { ClientCnpj } from './../../domain/entity/client-cnpj.entity';
 import { Injectable, Logger } from '@nestjs/common';
 import { ClientRepository } from 'src/domain/repository/client.repository';
 import { PrismaService } from '../services/prisma-adapter.service';
 import { ClientEntity } from 'src/domain/entity/client.entity';
 import { ClientFieldsVo } from 'src/domain/valueObject/client-fields.vo';
 import { ContractEntity } from 'src/domain/entity/contract.entity';
+import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
 
 @Injectable()
 export class ClientRepositoryService implements ClientRepository {
@@ -11,21 +13,26 @@ export class ClientRepositoryService implements ClientRepository {
 
   constructor(private prisma: PrismaService) {}
 
+  // FIND ALL CLIENTS
   async findAll(): Promise<ClientFieldsVo[]> {
     try {
       // FEETCHING CLIENT
-      const response = await this.prisma.client.findMany({
+      const response = await this.prisma.basicClient.findMany({
         // WITH SPECIFIC FIELDS
         select: {
           id: true,
-          nome_fantasia: true,
+          nome_cliente: true,
+          site: true,
           email: true,
-          ddd: true,
           telefone: true,
-          contracts: {
+          cnpj: {
             select: {
-              tipo: true,
-              termino_vigencia: true,
+              contracts: {
+                select: {
+                  tipo: true,
+                  termino_vigencia: true,
+                },
+              },
             },
           },
         },
@@ -39,14 +46,18 @@ export class ClientRepositoryService implements ClientRepository {
         (client) =>
           new ClientFieldsVo(
             client.id,
-            client.nome_fantasia,
+            client.nome_cliente,
+            client.site,
             client.email,
-            client.ddd,
             client.telefone,
-            client.contracts.map((contract) => ({
-              tipo: contract.tipo,
-              termino_vigencia: contract.termino_vigencia,
-            })),
+            client.cnpj.flatMap((c) => {
+              return c.contracts.map((contract) => {
+                return {
+                  tipo: contract.tipo,
+                  termino_vigencia: contract.termino_vigencia,
+                };
+              });
+            }),
           ),
       );
 
@@ -62,7 +73,7 @@ export class ClientRepositoryService implements ClientRepository {
   async findOne(id: string): Promise<ClientEntity> {
     try {
       // GET THE CLIENT
-      const client = await this.prisma.client.findUnique({
+      const client = await this.prisma.clientCnpj.findUnique({
         where: { id: id },
         include: { contracts: true },
       });
@@ -183,27 +194,84 @@ export class ClientRepositoryService implements ClientRepository {
     }
   }
 
-  async create(clientEntity: ClientEntity) {
-    // MAP ENTITY TO PRISMA CLIENT
-    const data = this.prisma.mapToPrismaClient(clientEntity);
+  // CREATE BASIC CLIENT
+  async createBasic(clientEntity: ClientEntity): Promise<{ status: string }> {
+    try {
+      // MAP ENTITY TO PRISMA CLIENT
+      const clientModel = this.prisma.mapToPrismaBasicClient(clientEntity);
 
-    // CHECK IF CLIENT EMAIL ALREADY EXISTS ON THE DB
-    const client = await this.prisma.client.findUnique({
-      where: {
-        email: data.email,
-      },
-    });
-
-    // SAVE NEW CLIENT
-    if (client === null) {
-      await this.prisma.client.create({
-        data,
+      // CHECK IF CLIENT EMAIL ALREADY EXISTS ON THE DB
+      const client = await this.prisma.basicClient.findUnique({
+        where: {
+          email: clientModel.email,
+        },
       });
 
-      return 'Novo cliente Registrado';
-    }
+      // SAVE NEW CLIENT
+      if (client === null) {
+        await this.prisma.basicClient.create({
+          data: clientModel,
+        });
 
-    return 'Cliente já registrado';
+        return { status: 'Novo cliente Registrado' };
+      }
+
+      return { status: 'Cliente já registrado' };
+    } catch (error) {
+      this.logger.error(error);
+      return { status: 'Erro interno no servidor' };
+    }
+  }
+
+  // CREATE BASIC CLIENT
+  async createCnpj(
+    clientCnpjEntity: ClientCnpjEntity,
+  ): Promise<{ status: string }> {
+    try {
+      //FIND RELATED CLIENT BY CNPJ OR CPF
+      const basicClient = await this.prisma.basicClient.findUnique({
+        select: {
+          id: true,
+        },
+        where: {
+          email: clientCnpjEntity.clientCnpj.email,
+        },
+      });
+
+      // CHECK IF CLIENT EXISTS
+      if (!basicClient || basicClient === null) {
+        return {
+          status: 'É necessario cadastrar o CNPJ com mesmo email do cliente.',
+        };
+      }
+
+      // MAP ENTITY TO PRISMA CLIENT
+      const clientModel = this.prisma.mapToPrismaCnpjClient(
+        clientCnpjEntity,
+        basicClient,
+      );
+
+      // CHECK IF CLIENT EMAIL ALREADY EXISTS ON THE DB
+      const clientCnpj = await this.prisma.clientCnpj.findUnique({
+        where: {
+          email: clientModel.email,
+        },
+      });
+
+      // SAVE NEW CLIENT
+      if (clientCnpj === null) {
+        await this.prisma.clientCnpj.create({
+          data: clientModel,
+        });
+
+        return { status: 'Novo CNPJ Registrado' };
+      }
+
+      return { status: 'CNPJ já registrado' };
+    } catch (error) {
+      this.logger.error(error);
+      return { status: 'Erro interno no servidor' };
+    }
   }
 
   // update(): void {

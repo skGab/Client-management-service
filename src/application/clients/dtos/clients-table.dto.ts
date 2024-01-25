@@ -1,4 +1,4 @@
-export class ClientFieldsDto {
+export class ClientTableDto {
   constructor(
     public id: string,
     public nome_cliente: string,

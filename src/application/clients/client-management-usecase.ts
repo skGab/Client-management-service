@@ -3,14 +3,9 @@ import { EntityFactoryService } from '../factory/entity-factory.service';
 import { ClientCnpjRegistrationDto } from './dtos/client-cnpj-registration.dto';
 import { ClientRepository } from 'src/domain/repository/client.repository';
 import { ClientEntity } from 'src/domain/entity/client.entity';
-<<<<<<< HEAD
-import { ClientFieldsDto } from './dtos/clients-table.dto';
-import { ManageClientStatus } from './manage-client-status.service';
-import { ClientBasicDto } from './dtos/client-basic.dto';
-=======
-import { ClientFieldsDto } from './dtos/client-fields.dto';
+import { ClientTableDto } from './dtos/clients-table.dto';
+import { BasicClientDto } from './dtos/basic-client.dto';
 import { ManageClientStatus } from './services/manage-client-status.service';
->>>>>>> 22fdb40934b4495725ee2648030b6d6c631cedf1
 
 @Injectable()
 export class ClientManagementUsecase {
@@ -44,7 +39,7 @@ export class ClientManagementUsecase {
   }
 
   // GET CLIENTS
-  async findAll(): Promise<ClientFieldsDto[] | { message: string }> {
+  async findAll(): Promise<ClientTableDto[] | { message: string }> {
     try {
       // MAKE THE REQUEST TO THE DB
       const clients = await this.clientRepositoryService.findAll();
@@ -56,7 +51,7 @@ export class ClientManagementUsecase {
       // MAPPING VALUE OBJECT TO DTO
       const dto = clients.map(
         (client) =>
-          new ClientFieldsDto(
+          new ClientTableDto(
             client.id,
             client.nome_fantasia,
             client.email,
@@ -75,20 +70,21 @@ export class ClientManagementUsecase {
 
   // CREATE CLIENTS
   async createClient(
-    clientBasicDto: (typeof ClientBasicDto)['_input'],
-  ): Promise<string> {
+    basicClientDto: (typeof BasicClientDto)['_input'],
+  ): Promise<{ status: string }> {
     try {
       // CONVERT DTO FORM TO ENTITY
-      const registrationForm =
-        this.entityFactoryService.mapClientToEntity(clientBasicDto);
+      const basicClient =
+        this.entityFactoryService.mapClientToEntity(basicClientDto);
 
       // CREATE CLIENT ENTITY
-      const clientEntity = new ClientEntity(registrationForm);
+      const clientEntity = new ClientEntity(basicClient);
 
       // SAVE ON THE DB
-      return await this.clientRepositoryService.create(clientEntity);
+      return await this.clientRepositoryService.createBasic(clientEntity);
     } catch (error) {
       this.logger.error(error.message);
+      return { status: 'Erro interno do servidor' };
     }
   }
 

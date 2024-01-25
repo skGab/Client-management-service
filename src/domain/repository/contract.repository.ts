@@ -18,7 +18,7 @@ export abstract class ContractRepository {
   abstract getExpiring(): Promise<ExpiringContractVo[]>;
 
   // CREATE CONTRACTS
-  abstract create(contractEntity: ContractEntity): Promise<string>;
+  abstract create(contractEntity: ContractEntity): Promise<{ status: string }>;
 
   // // GET SOME INFORMATIONS FROM CONTRACT
   // abstract getItemsInformation(clientId: string): Promise<ItemsInformationVo[]>;

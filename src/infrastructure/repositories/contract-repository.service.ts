@@ -61,9 +61,9 @@ export class ContractRepositoryService implements ContractRepository {
   }
 
   // CREATE CONTRACT
-  async create(contractEntity: ContractEntity): Promise<string> {
+  async create(contractEntity: ContractEntity): Promise<{ status: string }> {
     //FIND RELATED CLIENT BY CNPJ OR CPF
-    const client = await this.prisma.client.findUnique({
+    const client = await this.prisma.clientCnpj.findUnique({
       select: {
         id: true,
       },
@@ -74,18 +74,24 @@ export class ContractRepositoryService implements ContractRepository {
 
     // CHECK IF CLIENT EXISTS
     if (!client || client === null) {
-      return 'É necessario cadastrar o cliente com mesmo cnpj/cpf, antes de enviar o contrato.';
+      return {
+        status:
+          'É necessario cadastrar o cliente com mesmo cnpj/cpf, antes de enviar o contrato.',
+      };
     }
 
     // MAP ENTITY TO PRISMA CLIENT
-    const data = this.prisma.mapToPrismaContract(contractEntity, client);
+    const contractModel = this.prisma.mapToPrismaContract(
+      contractEntity,
+      client,
+    );
 
     // SAVE NEW CONTRACT
     await this.prisma.contract.create({
-      data,
+      data: contractModel,
     });
 
-    return 'Novo Contrato Registrado';
+    return { status: 'Novo Contrato Registrado' };
   }
 
   // GET EXPIRING CONTRACTS

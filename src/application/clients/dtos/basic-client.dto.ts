@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 // REGISTRATION SCHEMA
-export const ClientBasicDto = z
+export const BasicClientDto = z
   .object({
     nome_cliente: z.string(),
     site: z.string(),

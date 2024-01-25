@@ -10,14 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Client {
-  id                            String     @id @unique
+model BasicClient {
+  id           String       @id @unique
+  nome_cliente String
+  site         String
+  email        String       @unique
+  telefone     String
+  cnpj         ClientCnpj[]
+}
+
+model ClientCnpj {
+  id                            String       @id @unique
   razao_social                  String
-  nome_fantasia                 String
+  nome_cliente                  String
   site                          String
-  cnpj_cpf                      String     @unique
+  cnpj_cpf                      String       @unique
   insc_estadual                 String
-  email                         String     @unique
+  email                         String       @unique
   endereco_atendimento          String
   bairro                        String
   cep                           String
@@ -63,11 +72,13 @@ model Client {
   email_terceiro_contato        String
   telefone_terceiro_contato     String
   nascimento_terceiro_contato   String
+  BasicClient                   BasicClient? @relation(fields: [basicClientId], references: [id])
+  basicClientId                 String?
   contracts                     Contract[]
 }
 
 model Contract {
-  id                                 String  @id @unique
+  id                                 String      @id @unique
   cliente_novo                       Boolean
   cnpj_cpf                           String
   razao_social                       String?
@@ -88,6 +99,6 @@ model Contract {
   numero_parcelas                    String?
   data_vencimento                    String?
   observacoes_adicionais_nota_fiscal String?
-  Client                             Client? @relation(fields: [clientId], references: [id])
-  clientId                           String?
+  ClientCnpj                         ClientCnpj? @relation(fields: [clientCnpjId], references: [id])
+  clientCnpjId                       String?
 }
