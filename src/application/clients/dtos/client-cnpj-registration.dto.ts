@@ -3,7 +3,7 @@ import { z } from 'zod';
 // INFO BASICA
 const BasicInfoSchema = z.object({
   razao_social: z.string(),
-  nome_fantasia: z.string(),
+  nome_cliente: z.string(),
   site: z.string(),
   cnpj_cpf: z.string(),
   insc_estadual: z.string(),

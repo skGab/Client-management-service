@@ -6,6 +6,8 @@ CHANGES:
 4- 3 novos campos no cadastro de cnpj: emissao_nota string, retencao_iss string, forma_recebimento string
 5 - rota clients/registration alterada para clients/cnpj/registration
 6- Nova rota clients/basic/registration
+7 - Link para cadastro de cliente simples no campo de email, no cadastro de cnpj
+8 - Link para cadastro de cnpj após finalizaer o cadastro de cliente simples
 
 
 
@@ -23,25 +25,3 @@ Serviços recorrente:
 camapnha de perfomance digital
 gestão de redes sociais
 imbound marketing
-
-Adicionar cadastro de cnpj para clientes 
-
-
-cadastro de cliente simples:ok
-nome cliente ok
-site ok
-email ok
-telefone ok
-
-Cadastro de cnpj: ok
-Manter formulario completo ok
-havera emissão de nota ok
-cliente terá retenção de iss ok
-forma de recebiment ok
-
-
-
-
-
-Mesclar:
-valor total

@@ -6,6 +6,7 @@ import { ClientEntity } from 'src/domain/entity/client.entity';
 import { ClientTableDto } from './dtos/clients-table.dto';
 import { BasicClientDto } from './dtos/basic-client.dto';
 import { ManageClientStatus } from './services/manage-client-status.service';
+import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
 
 @Injectable()
 export class ClientManagementUsecase {
@@ -18,44 +19,45 @@ export class ClientManagementUsecase {
   ) {}
 
   // FIND CLIENT BY ID
-  async findById(id: string): Promise<ClientEntity | string> {
+  async findById(id: string): Promise<ClientCnpjEntity | { status: string }> {
     try {
       // CHECK IF HAS CLIENT ID
       if (!id || id === null || id === undefined)
-        return 'ID não encontrado na requisição';
+        return { status: 'ID não encontrado na requisição' };
 
       // GET CLIENT
       const client = await this.clientRepositoryService.findOne(id);
 
       // CHECK IF HAS CLIENT
       if (!client || client === undefined || client === null)
-        return 'Cliente não encontrado';
+        return { status: 'Cliente não encontrado' };
 
       // RETURN IT
       return client;
     } catch (error) {
       this.logger.error(error);
+      return { status: 'Erro interno no servidor' };
     }
   }
 
   // GET CLIENTS
-  async findAll(): Promise<ClientTableDto[] | { message: string }> {
+  async findAll(): Promise<ClientTableDto[] | { status: string }> {
     try {
       // MAKE THE REQUEST TO THE DB
       const clients = await this.clientRepositoryService.findAll();
 
       // CHECK IF HAS CLIENTS
       if (clients === null)
-        return { message: 'Nenhum cliente registrado no banco' };
+        return { status: 'Nenhum cliente registrado no banco' };
 
       // MAPPING VALUE OBJECT TO DTO
       const dto = clients.map(
         (client) =>
           new ClientTableDto(
             client.id,
-            client.nome_fantasia,
+            client.nome_cliente,
+            client.site,
             client.email,
-            client.ddd,
             client.telefone,
             this.manageClientStatus.run(client),
           ),
@@ -65,6 +67,7 @@ export class ClientManagementUsecase {
       return dto;
     } catch (error) {
       this.logger.error(error);
+      return { status: 'Erro interno no servidor' };
     }
   }
 
@@ -90,20 +93,21 @@ export class ClientManagementUsecase {
 
   // CREATE CLIENTS
   async createCnpj(
-    registrationFormDto: (typeof ClientCnpjRegistrationDto)['_input'],
-  ): Promise<string> {
+    clientCnpjDto: (typeof ClientCnpjRegistrationDto)['_input'],
+  ): Promise<{ status: string }> {
     try {
       // CONVERT DTO FORM TO ENTITY
-      const registrationForm =
-        this.entityFactoryService.mapClientToEntity(registrationFormDto);
+      const clientCnpj =
+        this.entityFactoryService.mapCnpjToEntity(clientCnpjDto);
 
       // CREATE CLIENT ENTITY
-      const clientEntity = new ClientEntity(registrationForm);
+      const clientEntity = new ClientCnpjEntity(clientCnpj);
 
       // SAVE ON THE DB
-      return await this.clientRepositoryService.create(clientEntity);
+      return await this.clientRepositoryService.createCnpj(clientEntity);
     } catch (error) {
       this.logger.error(error.message);
+      return { status: 'Erro interno no servidor' };
     }
   }
 }

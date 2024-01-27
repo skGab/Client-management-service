@@ -1,10 +1,27 @@
 import { ClientCnpjRegistrationDto } from './dtos/client-cnpj-registration.dto';
-import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  UsePipes,
+} from '@nestjs/common';
 import { ClientManagementUsecase } from './client-management-usecase';
 import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
 import { ClientTableDto } from './dtos/clients-table.dto';
-import { ClientEntity } from 'src/domain/entity/client.entity';
 import { BasicClientDto } from './dtos/basic-client.dto';
+import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
+
+// API RESPONSE
+class ApiResponse<T> {
+  constructor(
+    public status: number,
+    public payload?: T,
+    public error?: string,
+  ) {}
+}
 
 // DRIVING ADAPTER
 @Controller('clients')
@@ -15,23 +32,59 @@ export class ClientController {
 
   // RETURN ALL CLIENTS
   @Get()
-  async getAllClients(): Promise<ClientTableDto[] | { message: string }> {
-    return await this.clientManagementUsecase.findAll();
+  async getAllClients(): Promise<ApiResponse<ClientTableDto[]>> {
+    // GETTING CLIENTS PAYLOAD
+    const payload: ClientTableDto[] | { status: string } =
+      await this.clientManagementUsecase.findAll();
+
+    // CHECK IF PAYLOAD HAS ANY STATUS MESSAGE
+    if ('status' in payload) {
+      return new ApiResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        payload.status,
+      );
+    }
+
+    // RETURN RESPONSE
+    return new ApiResponse<ClientTableDto[]>(HttpStatus.OK, payload);
   }
 
   // // GET CLIENT BY ID
   @Get('findOne/:id')
-  getClientById(@Param('id') id: string): Promise<ClientEntity | string> {
-    return this.clientManagementUsecase.findById(id);
+  async getClientById(
+    @Param('id') id: string,
+  ): Promise<ApiResponse<ClientCnpjEntity>> {
+    // GET THE CLIENT PAYLOAD OR AN ERROR MESSAGE
+    const payload: ClientCnpjEntity | { status: string } =
+      await this.clientManagementUsecase.findById(id);
+
+    // CHECK IF HAS STATUS MESSAGE AND RETURN IT
+    if ('status' in payload) {
+      return new ApiResponse<ClientCnpjEntity>(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        payload.status,
+      );
+    }
+
+    // RETURN THE CLIENT WITH 200 STATUS CODE
+    return new ApiResponse<ClientCnpjEntity>(HttpStatus.OK, payload);
   }
 
   // BASIC CLIENT REGISTRATION
   @Post('basic/registration')
+  // PIPE VALIDATION
   @UsePipes(new ZodValidationPipe(BasicClientDto))
   async basicRegistration(
     @Body() basicClientDto: (typeof BasicClientDto)['_input'],
-  ): Promise<{ status: string }> {
-    return await this.clientManagementUsecase.createClient(basicClientDto);
+  ): Promise<ApiResponse<{ status: string }>> {
+    // TRY TO CREATE THE BASIC CLIENT
+    const response =
+      await this.clientManagementUsecase.createClient(basicClientDto);
+
+    // RETURN THE RESPONSE
+    return new ApiResponse<{ status: string }>(HttpStatus.OK, response);
   }
 
   // CLIENT CNPJ REGISTRATION
@@ -39,7 +92,12 @@ export class ClientController {
   @UsePipes(new ZodValidationPipe(ClientCnpjRegistrationDto))
   async cnpjRegistration(
     @Body() cnpjRegistration: (typeof ClientCnpjRegistrationDto)['_input'],
-  ) {
-    return await this.clientManagementUsecase.createCnpj(cnpjRegistration);
+  ): Promise<ApiResponse<{ status: string }>> {
+    // TRY TO CREATE THE CLIENT CNPJ
+    const response =
+      await this.clientManagementUsecase.createCnpj(cnpjRegistration);
+
+    // RETURN THE RESPONSE
+    return new ApiResponse<{ status: string }>(HttpStatus.OK, response);
   }
 }

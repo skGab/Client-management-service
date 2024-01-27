@@ -9,9 +9,6 @@ export interface Contract {
   nome_contato?: string;
   email_contato?: string;
   servicos_prestados: string[];
-  emissao_de_nota: string;
-  retencao_iss_emissao_nota_fiscal: string;
-  forma_recebimento: string;
   tipo: string;
 
   //   RECORRENTE

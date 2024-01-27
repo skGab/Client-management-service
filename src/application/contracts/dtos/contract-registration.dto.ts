@@ -31,7 +31,7 @@ const tipo_avulso = z
 //
 export const ContractRegistrationDto = z.object({
   // cliente_novo: z.boolean(),
-  // cnpj_cpf: z.string(),
+  cnpj_cpf: z.string(),
   // razao_social: z.string().optional(),
   // nome_fantasia: z.string().optional(),
   // nome_contato: z.string().optional(),

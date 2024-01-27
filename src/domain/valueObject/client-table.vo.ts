@@ -1,4 +1,4 @@
-export class ClientFieldsVo {
+export class ClientTableVo {
   constructor(
     public id: string,
     public nome_cliente: string,
@@ -7,8 +7,4 @@ export class ClientFieldsVo {
     public telefone: string,
     public contracts: { tipo: string; termino_vigencia: string }[],
   ) {}
-
-  // get status(): string {
-  //   if (this.tipo === 'avulso') return 'Avulso';
-  // }
 }

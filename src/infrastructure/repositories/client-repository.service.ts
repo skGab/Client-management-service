@@ -1,9 +1,8 @@
-import { ClientCnpj } from './../../domain/entity/client-cnpj.entity';
 import { Injectable, Logger } from '@nestjs/common';
 import { ClientRepository } from 'src/domain/repository/client.repository';
 import { PrismaService } from '../services/prisma-adapter.service';
 import { ClientEntity } from 'src/domain/entity/client.entity';
-import { ClientFieldsVo } from 'src/domain/valueObject/client-fields.vo';
+import { ClientTableVo } from 'src/domain/valueObject/client-table.vo';
 import { ContractEntity } from 'src/domain/entity/contract.entity';
 import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
 
@@ -14,7 +13,7 @@ export class ClientRepositoryService implements ClientRepository {
   constructor(private prisma: PrismaService) {}
 
   // FIND ALL CLIENTS
-  async findAll(): Promise<ClientFieldsVo[]> {
+  async findAll(): Promise<ClientTableVo[]> {
     try {
       // FEETCHING CLIENT
       const response = await this.prisma.basicClient.findMany({
@@ -44,7 +43,7 @@ export class ClientRepositoryService implements ClientRepository {
       // MAP REPSONSE TO VALUE OBJECT
       const clientsVo = response.map(
         (client) =>
-          new ClientFieldsVo(
+          new ClientTableVo(
             client.id,
             client.nome_cliente,
             client.site,
@@ -70,7 +69,7 @@ export class ClientRepositoryService implements ClientRepository {
   }
 
   // FIND CLIENT BY ID
-  async findOne(id: string): Promise<ClientEntity> {
+  async findOne(id: string): Promise<ClientCnpjEntity> {
     try {
       // GET THE CLIENT
       const client = await this.prisma.clientCnpj.findUnique({
@@ -114,11 +113,11 @@ export class ClientRepositoryService implements ClientRepository {
       });
 
       // MAP TO ENTITY
-      const clientEntity = new ClientEntity(
+      const clientEntity = new ClientCnpjEntity(
         {
           id: client.id,
           razao_social: client.razao_social,
-          nome_fantasia: client.nome_fantasia,
+          nome_cliente: client.nome_cliente,
           site: client.site,
           cnpj_cpf: client.cnpj_cpf,
           insc_estadual: client.insc_estadual,

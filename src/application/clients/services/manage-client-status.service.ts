@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ClientFieldsVo } from 'src/domain/valueObject/client-fields.vo';
+import { ClientTableVo } from 'src/domain/valueObject/client-table.vo';
 
 @Injectable()
 export class ManageClientStatus {
   private readonly logger = new Logger(ManageClientStatus.name);
 
-  run(client: ClientFieldsVo): string {
+  run(client: ClientTableVo): string {
     try {
       // CHECK FOR CLIENTS
       if (!client.contracts) return 'nenhum contrato registrado';
