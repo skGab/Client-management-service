@@ -56,6 +56,9 @@ model ClientCnpj {
   telefone_representante        String
   nascimento_representante      String
   email_boleto_notas            String
+  emissao_notas                 String
+  retencao_iss                  String
+  forma_recebimento             String
   nome_segundo_contato          String
   estado_civil_segundo_contato  String
   profissao_segundo_contato     String
@@ -78,27 +81,17 @@ model ClientCnpj {
 }
 
 model Contract {
-  id                                 String      @id @unique
-  cliente_novo                       Boolean
-  cnpj_cpf                           String
-  razao_social                       String?
-  nome_fantasia                      String?
-  nome_contato                       String?
-  email_contato                      String?
-  servicos_prestados                 Json
-  emissao_de_nota                    String
-  retencao_iss_emissao_nota_fiscal   String
-  forma_recebimento                  String
-  tipo                               String
-  inicio_vigencia                    String?
-  termino_vigencia                   String?
-  periodicidade                      String?
-  valor_do_periodo                   String?
-  observacoes_adicionais             String?
-  valor_total_servicos               String?
-  numero_parcelas                    String?
-  data_vencimento                    String?
-  observacoes_adicionais_nota_fiscal String?
-  ClientCnpj                         ClientCnpj? @relation(fields: [clientCnpjId], references: [id])
-  clientCnpjId                       String?
+  id                     String      @id @unique
+  cnpj_cpf               String
+  servicos_prestados     Json
+  tipo                   String
+  inicio_vigencia        String?
+  termino_vigencia       String?
+  periodicidade          String?
+  valor_total            String?
+  observacoes_adicionais String?
+  numero_parcelas        String?
+  data_vencimento        String?
+  ClientCnpj             ClientCnpj? @relation(fields: [clientCnpjId], references: [id])
+  clientCnpjId           String?
 }

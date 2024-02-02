@@ -47,6 +47,9 @@ export interface ClientCnpj {
   nascimento_representante: string;
 
   // INFO BOLETOS E NOTAS FISCAIS
+  emissao_nota: string;
+  retencao_iss: string;
+  forma_recebimento: string;
   email_boleto_notas: string;
 
   // TESTEMUNHA / SEGUNDO CONTATO

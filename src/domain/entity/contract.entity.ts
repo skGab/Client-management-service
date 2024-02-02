@@ -2,27 +2,19 @@ import { MainEntity } from './main.entity';
 
 export interface Contract {
   id?: string;
-  cliente_novo: boolean;
   cnpj_cpf: string;
-  razao_social?: string;
-  nome_fantasia?: string;
-  nome_contato?: string;
-  email_contato?: string;
-  servicos_prestados: string[];
   tipo: string;
-
-  //   RECORRENTE
-  inicio_vigencia?: string;
-  termino_vigencia?: string;
-  periodicidade?: string;
-  valor_do_periodo?: string;
+  servicos_prestados: string[];
+  inicio_vigencia: string;
+  termino_vigencia: string;
+  data_vencimento: string;
+  valor_total: string;
   observacoes_adicionais?: string;
 
+  //   RECORRENTE
+  periodicidade?: string;
   //   AVULSO
-  valor_total_servicos?: string;
   numero_parcelas?: string;
-  data_vencimento?: string;
-  observacoes_adicionais_nota_fiscal?: string;
 }
 
 export class ContractEntity extends MainEntity {

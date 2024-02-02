@@ -2,7 +2,7 @@ import { ContractEntity } from './../../domain/entity/contract.entity';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
-import { ClientEntity } from 'src/domain/entity/client.entity';
+import { BasicClientEntity } from 'src/domain/entity/client.entity';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
@@ -12,7 +12,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 
   // MAP TO BASIC CLIENT PRISMA MODEL
   public mapToPrismaBasicClient(
-    clientEntity: ClientEntity,
+    clientEntity: BasicClientEntity,
   ): Prisma.BasicClientCreateInput {
     return {
       id: clientEntity.getId(),
@@ -79,6 +79,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
         clientCnpjEntity.clientCnpj.nascimento_representante,
 
       // INFO BOLETOS E NOTAS FISCAIS
+      emissao_notas: clientCnpjEntity.clientCnpj.emissao_nota,
+      forma_recebimento: clientCnpjEntity.clientCnpj.forma_recebimento,
+      retencao_iss: clientCnpjEntity.clientCnpj.retencao_iss,
       email_boleto_notas: clientCnpjEntity.clientCnpj.email_boleto_notas,
 
       // TESTEMUNHA / SEGUNDO CONTATO
@@ -125,33 +128,18 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   ): Prisma.ContractCreateInput {
     return {
       id: contractEntity.getId(),
-      cliente_novo: contractEntity.contract.cliente_novo,
       cnpj_cpf: contractEntity.contract.cnpj_cpf,
-      razao_social: contractEntity.contract.razao_social,
-      nome_fantasia: contractEntity.contract.nome_fantasia,
-      nome_contato: contractEntity.contract.nome_contato,
-      email_contato: contractEntity.contract.email_contato,
-      servicos_prestados: contractEntity.contract.servicos_prestados,
-      emissao_de_nota: contractEntity.contract.emissao_de_nota,
-      retencao_iss_emissao_nota_fiscal:
-        contractEntity.contract.retencao_iss_emissao_nota_fiscal,
-      forma_recebimento: contractEntity.contract.forma_recebimento,
       tipo: contractEntity.contract.tipo,
-
-      // RECORRENTE
       inicio_vigencia: contractEntity.contract.inicio_vigencia,
       termino_vigencia: contractEntity.contract.termino_vigencia,
-      periodicidade: contractEntity.contract.periodicidade,
-      valor_do_periodo: contractEntity.contract.valor_do_periodo,
-      observacoes_adicionais: contractEntity.contract.observacoes_adicionais,
-
-      // AVULSO
-      valor_total_servicos: contractEntity.contract.valor_total_servicos,
-      numero_parcelas: contractEntity.contract.numero_parcelas,
+      valor_total: contractEntity.contract.valor_total,
       data_vencimento: contractEntity.contract.data_vencimento,
-      observacoes_adicionais_nota_fiscal:
-        contractEntity.contract.observacoes_adicionais_nota_fiscal,
-
+      servicos_prestados: contractEntity.contract.servicos_prestados,
+      observacoes_adicionais: contractEntity.contract.observacoes_adicionais,
+      // RECORRENTE
+      periodicidade: contractEntity.contract.periodicidade,
+      // AVULSO
+      numero_parcelas: contractEntity.contract.numero_parcelas,
       // CLIENT KEY
       ClientCnpj: {
         connect: {

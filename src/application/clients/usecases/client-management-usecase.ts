@@ -1,11 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { EntityFactoryService } from '../factory/entity-factory.service';
-import { ClientCnpjRegistrationDto } from './dtos/client-cnpj-registration.dto';
+import { DtoToEntityFactory } from '../../factory/dto-to-entity-factory.service';
+import { ClientCnpjRegistrationDto } from '../dtos/client-cnpj-registration.dto';
 import { ClientRepository } from 'src/domain/repository/client.repository';
-import { ClientEntity } from 'src/domain/entity/client.entity';
-import { ClientTableDto } from './dtos/clients-table.dto';
-import { BasicClientDto } from './dtos/basic-client.dto';
-import { ManageClientStatus } from './services/manage-client-status.service';
+import { BasicClientEntity } from 'src/domain/entity/client.entity';
+import { ShowClientsDTO } from '../dtos/show-clients.dto';
+import { BasicClientDto } from '../dtos/basic-client.dto';
+import { ManageClientStatus } from '../services/manage-client-status.service';
 import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class ClientManagementUsecase {
 
   constructor(
     private clientRepositoryService: ClientRepository,
-    private entityFactoryService: EntityFactoryService,
+    private entityFactoryService: DtoToEntityFactory,
     private manageClientStatus: ManageClientStatus,
   ) {}
 
@@ -41,7 +41,7 @@ export class ClientManagementUsecase {
   }
 
   // GET CLIENTS
-  async findAll(): Promise<ClientTableDto[] | { status: string }> {
+  async findAll(): Promise<ShowClientsDTO[] | { status: string }> {
     try {
       // MAKE THE REQUEST TO THE DB
       const clients = await this.clientRepositoryService.findAll();
@@ -53,7 +53,7 @@ export class ClientManagementUsecase {
       // MAPPING VALUE OBJECT TO DTO
       const dto = clients.map(
         (client) =>
-          new ClientTableDto(
+          new ShowClientsDTO(
             client.id,
             client.nome_cliente,
             client.site,
@@ -78,13 +78,13 @@ export class ClientManagementUsecase {
     try {
       // CONVERT DTO FORM TO ENTITY
       const basicClient =
-        this.entityFactoryService.mapClientToEntity(basicClientDto);
+        this.entityFactoryService.mapBasicClientToEntity(basicClientDto);
 
       // CREATE CLIENT ENTITY
-      const clientEntity = new ClientEntity(basicClient);
+      const basicClientEntity = new BasicClientEntity(basicClient);
 
       // SAVE ON THE DB
-      return await this.clientRepositoryService.createBasic(clientEntity);
+      return await this.clientRepositoryService.createBasic(basicClientEntity);
     } catch (error) {
       this.logger.error(error.message);
       return { status: 'Erro interno do servidor' };
@@ -98,7 +98,7 @@ export class ClientManagementUsecase {
     try {
       // CONVERT DTO FORM TO ENTITY
       const clientCnpj =
-        this.entityFactoryService.mapCnpjToEntity(clientCnpjDto);
+        this.entityFactoryService.mapClientCnpjToEntity(clientCnpjDto);
 
       // CREATE CLIENT ENTITY
       const clientEntity = new ClientCnpjEntity(clientCnpj);

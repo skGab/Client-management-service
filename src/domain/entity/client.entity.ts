@@ -8,7 +8,7 @@ export interface BasicClient {
   email: string;
   telefone: string;
 }
-export class ClientEntity extends MainEntity {
+export class BasicClientEntity extends MainEntity {
   constructor(
     public basicClient: BasicClient,
     public clientCnpj?: ClientCnpj[],

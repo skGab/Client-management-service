@@ -1,4 +1,4 @@
-import { ClientCnpjRegistrationDto } from './dtos/client-cnpj-registration.dto';
+import { ClientCnpjRegistrationDto } from '../dtos/client-cnpj-registration.dto';
 import {
   Body,
   Controller,
@@ -8,10 +8,10 @@ import {
   Post,
   UsePipes,
 } from '@nestjs/common';
-import { ClientManagementUsecase } from './client-management-usecase';
-import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
-import { ClientTableDto } from './dtos/clients-table.dto';
-import { BasicClientDto } from './dtos/basic-client.dto';
+import { ClientManagementUsecase } from '../usecases/client-management-usecase';
+import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
+import { ShowClientsDTO } from '../dtos/show-clients.dto';
+import { BasicClientDto } from '../dtos/basic-client.dto';
 import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
 
 // API RESPONSE
@@ -32,9 +32,9 @@ export class ClientController {
 
   // RETURN ALL CLIENTS
   @Get()
-  async getAllClients(): Promise<ApiResponse<ClientTableDto[]>> {
+  async getAllClients(): Promise<ApiResponse<ShowClientsDTO[]>> {
     // GETTING CLIENTS PAYLOAD
-    const payload: ClientTableDto[] | { status: string } =
+    const payload: ShowClientsDTO[] | { status: string } =
       await this.clientManagementUsecase.findAll();
 
     // CHECK IF PAYLOAD HAS ANY STATUS MESSAGE
@@ -47,7 +47,7 @@ export class ClientController {
     }
 
     // RETURN RESPONSE
-    return new ApiResponse<ClientTableDto[]>(HttpStatus.OK, payload);
+    return new ApiResponse<ShowClientsDTO[]>(HttpStatus.OK, payload);
   }
 
   // // GET CLIENT BY ID

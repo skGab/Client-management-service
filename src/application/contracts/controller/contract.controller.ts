@@ -9,10 +9,10 @@ import {
   Put,
   UsePipes,
 } from '@nestjs/common';
-import { ZodValidationPipe } from '../pipes/zod-validation.pipe';
-import { ContractRegistrationDto } from './dtos/contract-registration.dto';
-import { ContractManagementUsecase } from './contract-management-usecase';
-import { ContractItemsDto } from './dtos/contract-items.dto';
+import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
+import { ContractRegistrationDto } from '../dtos/contract-registration.dto';
+import { ContractManagementUsecase } from '../usecases/contract-management-usecase';
+import { ContractItemsDto } from '../dtos/contract-items.dto';
 
 // DRIVING ADAPTER
 @Controller('contracts')
@@ -35,11 +35,11 @@ export class ContractController {
     return await this.contractManagementUsecase.getExpiring();
   }
 
-  // GET ALL CONTRACTS BY ID
-  @Get('all/:id')
-  async allContractsById(@Param() clientId: { id: string }) {
-    return await this.contractManagementUsecase.getAllContractsById(clientId.id);
-  }
+  // // GET ALL CONTRACTS BY ID
+  // @Get('all/:id')
+  // async allContractsById(@Param() clientId: { id: string }) {
+  //   return await this.contractManagementUsecase.getAllContractsById(clientId.id);
+  // }
 
   // GET CONTRACT BY ID
   @Get('findOne/:id')
