@@ -15,7 +15,7 @@ import { BasicClientDto } from '../dtos/basic-client.dto';
 import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
 
 // API RESPONSE
-class ApiResponse<T> {
+export class ApiResponse<T> {
   constructor(
     public status: number,
     public payload?: T,
@@ -81,7 +81,7 @@ export class ClientController {
   ): Promise<ApiResponse<{ status: string }>> {
     // TRY TO CREATE THE BASIC CLIENT
     const response =
-      await this.clientManagementUsecase.createClient(basicClientDto);
+      await this.clientManagementUsecase.createBasicClient(basicClientDto);
 
     // RETURN THE RESPONSE
     return new ApiResponse<{ status: string }>(HttpStatus.OK, response);

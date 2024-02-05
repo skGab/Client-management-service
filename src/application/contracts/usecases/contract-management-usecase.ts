@@ -14,75 +14,32 @@ export class ContractManagementUsecase {
   constructor(
     private contractRepositoryService: ContractRepository,
     private entityFactoryService: DtoToEntityFactory,
-  ) {}
-
-  // // // GET CONTRACT ITEMS
-  // // async getItems(clientId: string): Promise<ContractItemsDto[] | string> {
-  // //   // GET THE DATA FROM THE DB
-  // //   const response =
-  // //     await this.contractRepositoryService.getItemsInformation(clientId);
-
-  // //   function periodicidadeChecker(info: ItemsInformationVo): number {
-  // //     switch (info.periodicidade) {
-  // //       case 'mensal':
-  // //         return 1;
-  // //       case 'bimestral':
-  // //         return 2;
-  // //       case 'trimestral':
-  // //         return 3;
-  // //       case 'semestral':
-  // //         return 6;
-
-  // //       default:
-  // //         return 0; // or a default value
-  // //     }
-  // //   }
-
-  // //   // PUT THE RESPONSE ON THE DTO OBJECT
-  // //   const servicos = response.map((info) => {
-  // //     const servicosAvulsos = [];
-
-  // //     return {
-  // //       nome: info.servicos_prestados,
-  // //       // IF THE CONTRACT HAS "AVULSO" TYPE, SO THE NUMBER OF THE CONTRACTS FOUND REPRESENTS THE AMOUT OF SERVICES
-  // //       // IF THE CONTRACTS HAS "RECORRENTE" TYPE, SÓ THE NUMBER OF SERVICES IS BASED ON THE "PERIODICIDADE" FIELD
-  // //       quantidade: info.tipo === 'recorrente' ? periodicidadeChecker(info) : 1,
-  // //     };
-  // //   });
-
-  // //   // DTO MAP
-  // //   const itemsDto = servicos.map((servico) => {
-  // //     return new ContractItemsDto(servico);
-  // //   });
-
-  // //   // RETURN THE DATA
-  // //   return itemsDto;
-  // // }
-
-  // // GET ALL CONTRACTS BY ID
-  // async getAllContractsById(clientId: string) {
-  //   // GET CONTRACTS
-  //   // MAP TO DTO
-  //   // RETURN THE DTO
-  // }
+  ) { }
 
   // GET CONTRACT BY ID
   async getContractById(id: { id: string }): Promise<ContractEntity | string> {
     try {
       // CHECK IF HAS ID
-      if (!id || id === undefined || id === null) return 'ID não encontrado';
+      if (!id || id === undefined || id === null) return 'ID não encontrado na requisição';
 
       // RETURN THE CONTRACT
-      return await this.contractRepositoryService.getContractById(id);
+      const response = await this.contractRepositoryService.getContractById(id);
+
+      if (response.error || response.message) {
+        return response.error || response.message
+      }
+
+      return response.payload
     } catch (error) {
       this.logger.error(error);
+      return error
     }
   }
 
   // CREATE CONTRACT
   async createContract(
     contractRegistrationDto: (typeof ContractRegistrationDto)['_input'],
-  ): Promise<{ status: string }> {
+  ): Promise<string> {
     try {
       // CONVERT DTO FORM TO ENTITY
       const contract = this.entityFactoryService.mapContractToEntity(
@@ -93,7 +50,13 @@ export class ContractManagementUsecase {
       const contractEntity = new ContractEntity(contract);
 
       // SAVE ON THE DB
-      return await this.contractRepositoryService.create(contractEntity);
+      const response = await this.contractRepositoryService.create(contractEntity);
+
+      if (response.error || response.message) {
+        return response.error || response.message
+      }
+
+      return response.payload
     } catch (error) {
       this.logger.error(error.message);
       return error;
@@ -107,15 +70,15 @@ export class ContractManagementUsecase {
       await this.contractRepositoryService.getExpiring();
 
     // RETURN AN MESSAGE OF ANY EXPIRING CONTRACTS IF IS NOT
-    if (!expiringContracts) return 'Nenhum contrato a vencer';
+    if (expiringContracts.error || expiringContracts.message) return expiringContracts.error || expiringContracts.message
 
     //  MAP THE OBJECT TO A DTO
-    const expiringDto = expiringContracts.map(
+    const expiringDto = expiringContracts.payload.map(
       (contract) =>
         new ExpiringContractDto(
           contract.getId(),
           contract.cnpj_cpf,
-          contract.email_contato,
+          contract.valor_total,
           contract.tipo,
           contract.data_vencimento,
           contract.termino_vigencia,
