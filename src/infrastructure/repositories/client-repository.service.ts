@@ -1,10 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ClientRepository, RepositoryResponse } from 'src/domain/repository/client.repository';
+import {
+  ClientRepository,
+  RepositoryResponse,
+} from 'src/domain/repository/client.repository';
 import { PrismaService } from '../services/prisma-adapter.service';
 import { BasicClientEntity } from 'src/domain/entity/client.entity';
 import { ClientTableVo } from 'src/domain/valueObject/client-table.vo';
 import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
 import { ClientFactoryService } from 'src/domain/factory/client.factory.service';
+import { transcode } from 'buffer';
 
 @Injectable()
 export class ClientRepositoryService implements ClientRepository {
@@ -13,7 +17,7 @@ export class ClientRepositoryService implements ClientRepository {
   constructor(
     private prisma: PrismaService,
     private clientFactory: ClientFactoryService,
-  ) { }
+  ) {}
 
   // FIND ALL CLIENTS
   async findAll(): Promise<RepositoryResponse<ClientTableVo[]>> {
@@ -41,7 +45,11 @@ export class ClientRepositoryService implements ClientRepository {
       });
 
       // RETURN NULL IF ANY CLIENTS ON DB
-      if (response.length === 0 || response === null) return new RepositoryResponse<ClientTableVo[]>(true, null, "Nenhum cliente encontrado no banco");
+      if (response.length === 0 || response === null)
+        return new RepositoryResponse<ClientTableVo[]>(
+          null,
+          'Nenhum cliente encontrado no banco',
+        );
 
       // MAP REPSONSE TO VALUE OBJECT
       const clientsVo = response.map(
@@ -64,10 +72,10 @@ export class ClientRepositoryService implements ClientRepository {
       );
 
       // RETURNING VO
-      return new RepositoryResponse<ClientTableVo[]>(true, clientsVo);
+      return new RepositoryResponse<ClientTableVo[]>(clientsVo);
     } catch (error) {
       this.logger.error(error);
-      return new RepositoryResponse<ClientTableVo[]>(false, null, "Erro interno", error);
+      throw error;
     }
   }
 
@@ -80,7 +88,11 @@ export class ClientRepositoryService implements ClientRepository {
         include: { contracts: true },
       });
 
-      if (clientCnpj === null || !clientCnpj) return new RepositoryResponse<ClientCnpjEntity>(true, null, "Nenhum cliente encontrado");
+      if (clientCnpj === null || !clientCnpj)
+        return new RepositoryResponse<ClientCnpjEntity>(
+          null,
+          'Nenhum cliente encontrado',
+        );
 
       // MAP TO CONTRACTS ENTITY
       const contracts = clientCnpj.contracts.map((contract) =>
@@ -94,10 +106,10 @@ export class ClientRepositoryService implements ClientRepository {
       );
 
       // RETURN IT
-      return new RepositoryResponse<ClientCnpjEntity>(true, clientCnpjEntity);
+      return new RepositoryResponse<ClientCnpjEntity>(clientCnpjEntity);
     } catch (error) {
       this.logger.error(error);
-      return new RepositoryResponse<ClientCnpjEntity>(false, null, "Erro interno", error);
+      throw error;
     }
   }
 
@@ -117,19 +129,19 @@ export class ClientRepositoryService implements ClientRepository {
         },
       });
 
-      // SAVE NEW CLIENT
-      if (client === null) {
-        await this.prisma.basicClient.create({
-          data: basicClientModel,
-        });
-
-        return new RepositoryResponse<string>(true, null, "Novo cliente cadastrado")
+      if (client !== null) {
+        return new RepositoryResponse<string>(null, 'Cliente já registrado');
       }
 
-      return new RepositoryResponse<string>(true, null, "Cliente já registrado")
+      // SAVE NEW CLIENT
+      await this.prisma.basicClient.create({
+        data: basicClientModel,
+      });
+
+      return new RepositoryResponse<string>('Novo cliente cadastrado');
     } catch (error) {
       this.logger.error(error);
-      return new RepositoryResponse<string>(false, null, "Erro interno", error)
+      throw error;
     }
   }
 
@@ -150,7 +162,10 @@ export class ClientRepositoryService implements ClientRepository {
 
       // CHECK IF CLIENT EXISTS
       if (!basicClient || basicClient === null) {
-        return new RepositoryResponse<string>(false, null, "É necessario cadastrar o CNPJ com mesmo email do cliente.")
+        return new RepositoryResponse<string>(
+          null,
+          'É necessario cadastrar o CNPJ com mesmo email do cliente.',
+        );
       }
 
       // MAP ENTITY TO PRISMA CLIENT
@@ -166,19 +181,19 @@ export class ClientRepositoryService implements ClientRepository {
         },
       });
 
-      // SAVE NEW CLIENT
-      if (clientCnpj === null) {
-        await this.prisma.clientCnpj.create({
-          data: clientModel,
-        });
-
-        return new RepositoryResponse<string>(true, null, "Novo CNPJ cadastrado")
+      if (clientCnpj !== null) {
+        return new RepositoryResponse<string>(null, 'CNPJ já registrado');
       }
 
-      return new RepositoryResponse<string>(true, null, "CNPJ já registrado")
+      // SAVE NEW CLIENT
+      await this.prisma.clientCnpj.create({
+        data: clientModel,
+      });
+
+      return new RepositoryResponse<string>('Novo CNPJ cadastrado');
     } catch (error) {
       this.logger.error(error);
-      return new RepositoryResponse<string>(false, null, "Erro interno", error)
+      throw error;
     }
   }
 }

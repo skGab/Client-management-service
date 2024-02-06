@@ -4,7 +4,10 @@ import { BasicClientEntity } from './../entity/client.entity';
 import { Injectable } from '@nestjs/common';
 
 export class RepositoryResponse<T> {
-  constructor(public status: boolean, public payload?: T, public message?: string, public error?: string) { }
+  constructor(
+    public payload?: T,
+    public message?: string,
+  ) {}
 }
 
 // DRIVEN PORT

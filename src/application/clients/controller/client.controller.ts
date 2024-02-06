@@ -1,9 +1,15 @@
 import { ClientCnpjRegistrationDto } from '../dtos/client-cnpj-registration.dto';
 import {
+  BadGatewayException,
+  BadRequestException,
   Body,
+  ConflictException,
   Controller,
+  ExceptionFilter,
   Get,
+  HttpException,
   HttpStatus,
+  InternalServerErrorException,
   Param,
   Post,
   UsePipes,
@@ -19,7 +25,6 @@ export class ApiResponse<T> {
   constructor(
     public status: number,
     public payload?: T,
-    public error?: string,
   ) {}
 }
 
@@ -33,71 +38,87 @@ export class ClientController {
   // RETURN ALL CLIENTS
   @Get()
   async getAllClients(): Promise<ApiResponse<ShowClientsDTO[]>> {
-    // GETTING CLIENTS PAYLOAD
-    const payload: ShowClientsDTO[] | { status: string } =
-      await this.clientManagementUsecase.findAll();
+    try {
+      // FIND ALL CLIENTS
+      const payload = await this.clientManagementUsecase.findAll();
 
-    // CHECK IF PAYLOAD HAS ANY STATUS MESSAGE
-    if ('status' in payload) {
-      return new ApiResponse(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        null,
-        payload.status,
-      );
+      return new ApiResponse<ShowClientsDTO[]>(HttpStatus.OK, payload);
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException('Erro interno no servidor');
     }
-
-    // RETURN RESPONSE
-    return new ApiResponse<ShowClientsDTO[]>(HttpStatus.OK, payload);
   }
 
-  // // GET CLIENT BY ID
+  // // GET CLIENT CNPJ BY ID
   @Get('findOne/:id')
   async getClientById(
     @Param('id') id: string,
   ): Promise<ApiResponse<ClientCnpjEntity>> {
-    // GET THE CLIENT PAYLOAD OR AN ERROR MESSAGE
-    const payload: ClientCnpjEntity | { status: string } =
-      await this.clientManagementUsecase.findById(id);
+    try {
+      // CHECK IF HAS CLIENT ID
+      if (!id)
+        throw new BadRequestException(
+          'ID não encontrado no corpo da requisição',
+        );
 
-    // CHECK IF HAS STATUS MESSAGE AND RETURN IT
-    if ('status' in payload) {
-      return new ApiResponse<ClientCnpjEntity>(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        null,
-        payload.status,
-      );
+      // GET THE CLIENT PAYLOAD OR AN ERROR MESSAGE
+      const payload: ClientCnpjEntity =
+        await this.clientManagementUsecase.findById(id);
+
+      return new ApiResponse<ClientCnpjEntity>(HttpStatus.OK, payload);
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException('Erro interno no servidor');
     }
-
-    // RETURN THE CLIENT WITH 200 STATUS CODE
-    return new ApiResponse<ClientCnpjEntity>(HttpStatus.OK, payload);
   }
 
   // BASIC CLIENT REGISTRATION
   @Post('basic/registration')
-  // PIPE VALIDATION
   @UsePipes(new ZodValidationPipe(BasicClientDto))
+  // VALIDATION _____
   async basicRegistration(
     @Body() basicClientDto: (typeof BasicClientDto)['_input'],
-  ): Promise<ApiResponse<{ status: string }>> {
-    // TRY TO CREATE THE BASIC CLIENT
-    const response =
-      await this.clientManagementUsecase.createBasicClient(basicClientDto);
+  ): Promise<ApiResponse<string>> {
+    try {
+      // CREATE BASIC CLIENT
+      const response =
+        await this.clientManagementUsecase.createBasicClient(basicClientDto);
 
-    // RETURN THE RESPONSE
-    return new ApiResponse<{ status: string }>(HttpStatus.OK, response);
+      return new ApiResponse<string>(HttpStatus.OK, response);
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException('Erro interno no servidor');
+    }
   }
 
   // CLIENT CNPJ REGISTRATION
   @Post('cnpj/registration')
   @UsePipes(new ZodValidationPipe(ClientCnpjRegistrationDto))
+  // VALIDATION _____
   async cnpjRegistration(
     @Body() cnpjRegistration: (typeof ClientCnpjRegistrationDto)['_input'],
-  ): Promise<ApiResponse<{ status: string }>> {
-    // TRY TO CREATE THE CLIENT CNPJ
-    const response =
-      await this.clientManagementUsecase.createCnpj(cnpjRegistration);
+  ): Promise<ApiResponse<string>> {
+    try {
+      // CREATE CNPJ
+      const response =
+        await this.clientManagementUsecase.createCnpj(cnpjRegistration);
 
-    // RETURN THE RESPONSE
-    return new ApiResponse<{ status: string }>(HttpStatus.OK, response);
+      return new ApiResponse<string>(HttpStatus.OK, response);
+    } catch (error) {
+      throw new InternalServerErrorException('Erro interno no servidor');
+    }
   }
 }

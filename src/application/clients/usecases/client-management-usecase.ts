@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { DtoToEntityFactory } from '../../factory/dto-to-entity-factory.service';
 import { ClientCnpjRegistrationDto } from '../dtos/client-cnpj-registration.dto';
 import { ClientRepository } from 'src/domain/repository/client.repository';
@@ -7,8 +7,6 @@ import { ShowClientsDTO } from '../dtos/show-clients.dto';
 import { BasicClientDto } from '../dtos/basic-client.dto';
 import { ManageClientStatus } from '../services/manage-client-status.service';
 import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
-import { string } from 'zod';
-import { response } from 'express';
 
 @Injectable()
 export class ClientManagementUsecase {
@@ -18,34 +16,16 @@ export class ClientManagementUsecase {
     private clientRepositoryService: ClientRepository,
     private entityFactoryService: DtoToEntityFactory,
     private manageClientStatus: ManageClientStatus,
-  ) { }
-
-  // FIND CLIENT BY ID
-  async findById(id: string): Promise<ClientCnpjEntity | { status: string }> {
-    // CHECK IF HAS CLIENT ID
-    if (!id)
-      return { status: 'ID não encontrado na requisição' };
-
-    // GET CLIENT
-    const client = await this.clientRepositoryService.findOne(id);
-
-    // CHECK IF HAS CLIENT
-    if (client.error || client.message) {
-      return { status: client.error || client.message };
-    }
-
-    return client.payload;
-  }
+  ) {}
 
   // GET CLIENTS
-  async findAll(): Promise<ShowClientsDTO[] | { status: string }> {
+  async findAll(): Promise<ShowClientsDTO[]> {
     try {
       // MAKE THE REQUEST TO THE DB
       const clients = await this.clientRepositoryService.findAll();
 
-      // CHECK IF HAS CLIENTS
-      if (clients.error || clients.message)
-        return { status: clients.error || clients.message };
+      // CHECK FOR ERRORS
+      if (clients.message) throw new ConflictException(clients.message);
 
       // MAPPING VALUE OBJECT TO DTO
       const dto = clients.payload.map(
@@ -64,59 +44,67 @@ export class ClientManagementUsecase {
       return dto;
     } catch (error) {
       this.logger.error(error);
-      return { status: error };
+      throw error;
+    }
+  }
+
+  // FIND CLIENT BY ID
+  async findById(id: string): Promise<ClientCnpjEntity> {
+    try {
+      // GET CLIENT
+      const client = await this.clientRepositoryService.findOne(id);
+
+      // CHECK IF HAS CLIENT
+      if (client.message) throw new ConflictException(client.message);
+
+      return client.payload;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
     }
   }
 
   // CREATE CLIENTS
   async createBasicClient(
     basicClientDto: (typeof BasicClientDto)['_input'],
-  ): Promise<{ status: string }> {
+  ): Promise<string> {
     try {
       // CONVERT DTO FORM TO ENTITY
-      const basicClient =
+      const basicClientEntity =
         this.entityFactoryService.mapBasicClientToEntity(basicClientDto);
 
-      // CREATE CLIENT ENTITY
-      const basicClientEntity = new BasicClientEntity(basicClient);
-
       // SAVE ON THE DB
-      const response = await this.clientRepositoryService.createBasic(basicClientEntity);
+      const response =
+        await this.clientRepositoryService.createBasic(basicClientEntity);
 
-      if (response.error || response.message) {
-        return { status: response.error || response.message }
-      }
+      if (response.message) throw new ConflictException(response.message);
 
-      return { status: response.payload }
+      return response.payload;
     } catch (error) {
       this.logger.error(error.message);
-      return { status: error };
+      throw error;
     }
   }
 
   // CREATE CLIENTS
   async createCnpj(
     clientCnpjDto: (typeof ClientCnpjRegistrationDto)['_input'],
-  ): Promise<{ status: string }> {
+  ): Promise<string> {
     try {
       // CONVERT DTO FORM TO ENTITY
-      const clientCnpj =
+      const clientEntity =
         this.entityFactoryService.mapClientCnpjToEntity(clientCnpjDto);
 
-      // CREATE CLIENT ENTITY
-      const clientEntity = new ClientCnpjEntity(clientCnpj);
-
       // SAVE ON THE DB
-      const response = await this.clientRepositoryService.createCnpj(clientEntity);
+      const response =
+        await this.clientRepositoryService.createCnpj(clientEntity);
 
-      if (response.error || response.message) {
-        return { status: response.error || response.message }
-      }
+      if (response.message) throw new ConflictException(response.message);
 
-      return { status: response.payload }
+      return response.payload;
     } catch (error) {
       this.logger.error(error.message);
-      return { status: 'Erro interno no servidor' };
+      return error;
     }
   }
 }

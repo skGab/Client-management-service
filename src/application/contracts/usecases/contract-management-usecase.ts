@@ -4,8 +4,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ContractEntity } from 'src/domain/entity/contract.entity';
 import { ContractRepository } from 'src/domain/repository/contract.repository';
 import { ExpiringContractDto } from '../dtos/expiring-contract.dto';
-import { ContractItemsDto } from '../dtos/contract-items.dto';
-import { ItemsInformationVo } from 'src/domain/valueObject/items-information.vo';
 
 @Injectable()
 export class ContractManagementUsecase {

@@ -1,9 +1,12 @@
 import { ContractRegistrationDto } from '../contracts/dtos/contract-registration.dto';
 import { ClientCnpjRegistrationDto } from '../clients/dtos/client-cnpj-registration.dto';
 import { Contract } from 'src/domain/entity/contract.entity';
-import { BasicClient } from 'src/domain/entity/client.entity';
+import { BasicClientEntity } from 'src/domain/entity/client.entity';
 import { BasicClientDto } from '../clients/dtos/basic-client.dto';
-import { ClientCnpj } from 'src/domain/entity/client-cnpj.entity';
+import {
+  ClientCnpj,
+  ClientCnpjEntity,
+} from 'src/domain/entity/client-cnpj.entity';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -33,19 +36,19 @@ export class DtoToEntityFactory {
   // MAP CLIENT TO CLIENT ENTITY
   public mapBasicClientToEntity(
     basicClientDto: (typeof BasicClientDto)['_input'],
-  ): BasicClient {
-    return {
+  ): BasicClientEntity {
+    return new BasicClientEntity({
       nome_cliente: basicClientDto.nome_cliente,
       site: basicClientDto.site,
       email: basicClientDto.email,
       telefone: basicClientDto.telefone,
-    };
+    });
   }
 
   public mapClientCnpjToEntity(
     clientCnpjDto: (typeof ClientCnpjRegistrationDto)['_input'],
-  ): ClientCnpj {
-    return {
+  ): ClientCnpjEntity {
+    return new ClientCnpjEntity({
       // Mapping for BasicInfo
       razao_social: clientCnpjDto.basicInfo.razao_social,
       nome_cliente: clientCnpjDto.basicInfo.nome_cliente,
@@ -129,6 +132,6 @@ export class DtoToEntityFactory {
         clientCnpjDto.AdditionalContactsSchema.telefone_terceiro_contato,
       nascimento_terceiro_contato:
         clientCnpjDto.AdditionalContactsSchema.nascimento_terceiro_contato,
-    };
+    });
   }
 }
