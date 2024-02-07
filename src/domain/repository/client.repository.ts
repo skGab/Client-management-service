@@ -1,6 +1,6 @@
 import { ClientCnpjEntity } from '../entity/client-cnpj.entity';
 import { ClientTableVo } from '../valueObject/client-table.vo';
-import { BasicClientEntity } from './../entity/client.entity';
+import { BasicClientEntity } from '../entity/basic-client.entity';
 import { Injectable } from '@nestjs/common';
 
 export class RepositoryResponse<T> {
@@ -13,11 +13,13 @@ export class RepositoryResponse<T> {
 // DRIVEN PORT
 @Injectable()
 export abstract class ClientRepository {
-  // FIND ALL CLIENTS
-  abstract findAll(): Promise<RepositoryResponse<ClientTableVo[]>>;
+  // FIND ALL BASIC CLIENTS
+  abstract findAllBasic(): Promise<RepositoryResponse<ClientTableVo[]>>;
 
   // FIND SPECIFIC CLIENT
-  abstract findOne(id: string): Promise<RepositoryResponse<ClientCnpjEntity>>;
+  abstract findCnpjs(
+    id: string,
+  ): Promise<RepositoryResponse<ClientCnpjEntity[]>>;
 
   // CREATE BASIC CLIENT
   abstract createBasic(

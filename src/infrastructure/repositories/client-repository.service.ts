@@ -4,7 +4,7 @@ import {
   RepositoryResponse,
 } from 'src/domain/repository/client.repository';
 import { PrismaService } from '../services/prisma-adapter.service';
-import { BasicClientEntity } from 'src/domain/entity/client.entity';
+import { BasicClientEntity } from 'src/domain/entity/basic-client.entity';
 import { ClientTableVo } from 'src/domain/valueObject/client-table.vo';
 import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
 import { ClientFactoryService } from 'src/domain/factory/client.factory.service';
@@ -19,10 +19,10 @@ export class ClientRepositoryService implements ClientRepository {
   ) {}
 
   // FIND ALL CLIENTS
-  async findAll(): Promise<RepositoryResponse<ClientTableVo[]>> {
+  async findAllBasic(): Promise<RepositoryResponse<ClientTableVo[]>> {
     try {
       // FEETCHING CLIENT
-      const response = await this.prisma.basicClient.findMany({
+      const basicClients = await this.prisma.basicClient.findMany({
         // WITH SPECIFIC FIELDS
         select: {
           id: true,
@@ -30,8 +30,9 @@ export class ClientRepositoryService implements ClientRepository {
           site: true,
           email: true,
           telefone: true,
-          cnpj: {
+          ClientCnpj: {
             select: {
+              id: true,
               contracts: {
                 select: {
                   tipo: true,
@@ -44,22 +45,22 @@ export class ClientRepositoryService implements ClientRepository {
       });
 
       // RETURN NULL IF ANY CLIENTS ON DB
-      if (response.length === 0 || response === null)
+      if (basicClients.length === 0 || basicClients === null)
         return new RepositoryResponse<ClientTableVo[]>(
           null,
           'Nenhum cliente encontrado no banco',
         );
 
       // MAP REPSONSE TO VALUE OBJECT
-      const clientsVo = response.map(
-        (client) =>
+      const basicClientVo = basicClients.map(
+        (basicClient) =>
           new ClientTableVo(
-            client.id,
-            client.nome_cliente,
-            client.site,
-            client.email,
-            client.telefone,
-            client.cnpj.flatMap((c) => {
+            basicClient.id,
+            basicClient.nome_cliente,
+            basicClient.site,
+            basicClient.email,
+            basicClient.telefone,
+            basicClient.ClientCnpj.flatMap((c) => {
               return c.contracts.map((contract) => {
                 return {
                   tipo: contract.tipo,
@@ -71,41 +72,38 @@ export class ClientRepositoryService implements ClientRepository {
       );
 
       // RETURNING VO
-      return new RepositoryResponse<ClientTableVo[]>(clientsVo);
+      return new RepositoryResponse<ClientTableVo[]>(basicClientVo);
     } catch (error) {
       this.logger.error(error);
       throw error;
     }
   }
 
-  // FIND CLIENT BY ID
-  async findOne(id: string): Promise<RepositoryResponse<ClientCnpjEntity>> {
+  // FIND CLIENT CNPJ BY ID
+  async findCnpjs(
+    clientID: string,
+  ): Promise<RepositoryResponse<ClientCnpjEntity[]>> {
     try {
       // GET THE CLIENT
-      const clientCnpj = await this.prisma.clientCnpj.findUnique({
-        where: { id: id },
+      const clientCnpjs = await this.prisma.clientCnpj.findMany({
+        where: { basicClientId: clientID },
         include: { contracts: true },
       });
 
-      if (clientCnpj === null || !clientCnpj)
-        return new RepositoryResponse<ClientCnpjEntity>(
+      if (clientCnpjs === null || !clientCnpjs)
+        return new RepositoryResponse<ClientCnpjEntity[]>(
           null,
-          'Nenhum cliente encontrado',
+          'Nenhum CNPJ encontrado',
         );
 
-      // MAP TO CONTRACTS ENTITY
-      const contracts = clientCnpj.contracts.map((contract) =>
-        this.clientFactory.toContractEntity(contract),
-      );
+      console.log(clientCnpjs);
 
       // MAP TO ENTITY
-      const clientCnpjEntity = this.clientFactory.toClientCnpjEntity(
-        clientCnpj,
-        contracts,
-      );
+      const clientCnpjEntity =
+        this.clientFactory.toClientCnpjEntity(clientCnpjs);
 
       // RETURN IT
-      return new RepositoryResponse<ClientCnpjEntity>(clientCnpjEntity);
+      return new RepositoryResponse<ClientCnpjEntity[]>(clientCnpjEntity);
     } catch (error) {
       this.logger.error(error);
       throw error;
@@ -149,7 +147,7 @@ export class ClientRepositoryService implements ClientRepository {
     clientCnpjEntity: ClientCnpjEntity,
   ): Promise<RepositoryResponse<string>> {
     try {
-      //FIND RELATED CLIENT BY CNPJ OR CPF
+      //FIND RELATED CLIENT BY EMAIL
       const basicClient = await this.prisma.basicClient.findUnique({
         select: {
           id: true,
@@ -173,10 +171,10 @@ export class ClientRepositoryService implements ClientRepository {
         basicClient,
       );
 
-      // CHECK IF CLIENT EMAIL ALREADY EXISTS ON THE DB
+      // CHECK IF CLIENT CNPJ ALREADY EXISTS ON THE DB
       const clientCnpj = await this.prisma.clientCnpj.findUnique({
         where: {
-          email: clientModel.email,
+          cnpj_cpf: clientModel.cnpj_cpf,
         },
       });
 

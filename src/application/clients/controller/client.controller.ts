@@ -8,14 +8,16 @@ import {
   HttpStatus,
   InternalServerErrorException,
   Param,
+  ParseIntPipe,
   Post,
   UsePipes,
 } from '@nestjs/common';
 import { ClientManagementUsecase } from '../usecases/client-management-usecase';
 import { ZodValidationPipe } from '../../pipes/zod-validation.pipe';
-import { ShowClientsDTO } from '../dtos/show-clients.dto';
+import { ClientsTableDTO } from '../dtos/clients-table.dto';
 import { BasicClientDto } from '../dtos/basic-client.dto';
 import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
+import { number, string } from 'zod';
 
 // API RESPONSE
 export class ApiResponse<T> {
@@ -34,12 +36,12 @@ export class ClientController {
 
   // RETURN ALL CLIENTS
   @Get()
-  async getAllClients(): Promise<ApiResponse<ShowClientsDTO[]>> {
+  async getAllBasic(): Promise<ApiResponse<ClientsTableDTO[]>> {
     try {
       // FIND ALL CLIENTS
-      const payload = await this.clientManagementUsecase.findAll();
+      const payload = await this.clientManagementUsecase.findAllBasicClients();
 
-      return new ApiResponse<ShowClientsDTO[]>(HttpStatus.OK, payload);
+      return new ApiResponse<ClientsTableDTO[]>(HttpStatus.OK, payload);
     } catch (error) {
       if (error instanceof ConflictException) {
         throw error;
@@ -49,29 +51,23 @@ export class ClientController {
     }
   }
 
-  // // GET CLIENT CNPJ BY ID
-  @Get('findOne/:id')
-  async getClientById(
-    @Param('id') id: string,
-  ): Promise<ApiResponse<ClientCnpjEntity>> {
+  // GET CNPJS AND CONTRACTS
+  @Get(':id')
+  async getCnpjs(
+    @Param('id')
+    clientID: string,
+  ): Promise<ApiResponse<ClientCnpjEntity[]>> {
     try {
-      // CHECK IF HAS CLIENT ID
-      if (!id)
-        throw new BadRequestException(
-          'ID não encontrado no corpo da requisição',
-        );
-
       // GET THE CLIENT PAYLOAD OR AN ERROR MESSAGE
-      const payload: ClientCnpjEntity =
-        await this.clientManagementUsecase.findById(id);
+      const payload =
+        await this.clientManagementUsecase.findCnpjsByClientId(clientID);
 
-      return new ApiResponse<ClientCnpjEntity>(HttpStatus.OK, payload);
+      return new ApiResponse<ClientCnpjEntity[]>(HttpStatus.OK, payload);
     } catch (error) {
-      if (error instanceof BadRequestException) {
+      if (error instanceof ConflictException) {
         throw error;
       }
-
-      if (error instanceof ConflictException) {
+      if (error instanceof BadRequestException) {
         throw error;
       }
 
@@ -115,6 +111,10 @@ export class ClientController {
 
       return new ApiResponse<string>(HttpStatus.OK, response);
     } catch (error) {
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+
       throw new InternalServerErrorException('Erro interno no servidor');
     }
   }

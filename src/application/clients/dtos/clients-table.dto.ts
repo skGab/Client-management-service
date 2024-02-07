@@ -1,4 +1,4 @@
-export class ShowClientsDTO {
+export class ClientsTableDTO {
   constructor(
     public id: string,
     public nome_cliente: string,

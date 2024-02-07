@@ -2,7 +2,7 @@ import { ContractEntity } from './../../domain/entity/contract.entity';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
-import { BasicClientEntity } from 'src/domain/entity/client.entity';
+import { BasicClientEntity } from 'src/domain/entity/basic-client.entity';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {

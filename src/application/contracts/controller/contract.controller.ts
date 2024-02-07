@@ -43,7 +43,7 @@ export class ContractController {
   }
 
   // GET CONTRACT BY ID
-  @Get('findOne/:id')
+  @Get('one/:id')
   async contractById(
     @Param() id: { id: string },
   ): Promise<ApiResponse<ContractEntity>> {

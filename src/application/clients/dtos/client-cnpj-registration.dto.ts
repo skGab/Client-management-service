@@ -87,11 +87,11 @@ const AdditionalContactsSchema = z.object({
 // REGISTRATION SCHEMA
 export const ClientCnpjRegistrationDto = z
   .object({
-    basicInfo: BasicInfoSchema,
-    contactInfo: ContactInfoSchema,
-    billingInfo: BillingInfoSchema,
-    finacialInfo: FinancialResponsibleSchema,
-    legalInfo: LegalRepresentativeSchema,
-    AdditionalContactsSchema: AdditionalContactsSchema,
+    info_basica: BasicInfoSchema,
+    info_contrato: ContactInfoSchema,
+    info_pagamento: BillingInfoSchema,
+    info_financeiro: FinancialResponsibleSchema,
+    info_representante: LegalRepresentativeSchema,
+    info_contato_adicional: AdditionalContactsSchema,
   })
   .required();

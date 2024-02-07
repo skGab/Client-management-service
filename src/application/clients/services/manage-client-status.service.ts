@@ -8,12 +8,7 @@ export class ManageClientStatus {
   run(client: ClientTableVo): string {
     try {
       // CHECK FOR CLIENTS
-      if (!client.contracts) return 'nenhum contrato registrado';
-
-      // GET CONTRACT TYPES
-      const contractTypes = client.contracts.map((contract) =>
-        contract.tipo.toLocaleLowerCase(),
-      );
+      if (client.contracts.length == 0) return 'inativo';
 
       // GET CONTRACT DATES
       const contractDates = client.contracts.map(
@@ -29,24 +24,20 @@ export class ManageClientStatus {
         const contractDate = new Date(date);
 
         if (contractDate >= currentDate) {
-          return 'ativo';
+          return 'Ativo';
         }
 
-        return 'inativo';
+        return 'Inativo';
       });
 
       // CHECK IF HAS ACTIVE DATES ON THE ARRAY STATUS
       // RETURN ATIVO IF HAS
-      // RETURN AVULSO IF NO ACTIVE ON THE STATUS
-      if (status.includes('ativo')) {
-        return 'ativo';
-      } else if (contractTypes.includes('avulso')) {
-        return 'ativo';
-      }
+      if (status.includes('Ativo')) return 'Ativo';
 
-      return 'inativo';
+      return 'Inativo';
     } catch (error) {
       this.logger.error(error);
+      return 'Erro interno';
     }
   }
 }

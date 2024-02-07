@@ -2,7 +2,7 @@ import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { DtoToEntityFactory } from '../../factory/dto-to-entity-factory.service';
 import { ClientCnpjRegistrationDto } from '../dtos/client-cnpj-registration.dto';
 import { ClientRepository } from 'src/domain/repository/client.repository';
-import { ShowClientsDTO } from '../dtos/show-clients.dto';
+import { ClientsTableDTO } from '../dtos/clients-table.dto';
 import { BasicClientDto } from '../dtos/basic-client.dto';
 import { ManageClientStatus } from '../services/manage-client-status.service';
 import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
@@ -17,19 +17,20 @@ export class ClientManagementUsecase {
     private manageClientStatus: ManageClientStatus,
   ) {}
 
-  // GET CLIENTS
-  async findAll(): Promise<ShowClientsDTO[]> {
+  // GET ALL BASIC CLIENTS
+  async findAllBasicClients(): Promise<ClientsTableDTO[]> {
     try {
       // MAKE THE REQUEST TO THE DB
-      const clients = await this.clientRepositoryService.findAll();
+      const clientsTableVo = await this.clientRepositoryService.findAllBasic();
 
       // CHECK FOR ERRORS
-      if (clients.message) throw new ConflictException(clients.message);
+      if (clientsTableVo.message)
+        throw new ConflictException(clientsTableVo.message);
 
       // MAPPING VALUE OBJECT TO DTO
-      const dto = clients.payload.map(
+      const dto = clientsTableVo.payload.map(
         (client) =>
-          new ShowClientsDTO(
+          new ClientsTableDTO(
             client.id,
             client.nome_cliente,
             client.site,
@@ -47,23 +48,25 @@ export class ClientManagementUsecase {
     }
   }
 
-  // FIND CLIENT BY ID
-  async findById(id: string): Promise<ClientCnpjEntity> {
+  // GET CLIENT CNPJS AND CONTRACTS
+  async findCnpjsByClientId(clientID: string): Promise<ClientCnpjEntity[]> {
     try {
-      // GET CLIENT
-      const client = await this.clientRepositoryService.findOne(id);
+      // GET CLIENTS
+      const cnpjEntities =
+        await this.clientRepositoryService.findCnpjs(clientID);
 
       // CHECK IF HAS CLIENT
-      if (client.message) throw new ConflictException(client.message);
+      if (cnpjEntities.message)
+        throw new ConflictException(cnpjEntities.message);
 
-      return client.payload;
+      return cnpjEntities.payload;
     } catch (error) {
       this.logger.error(error);
       throw error;
     }
   }
 
-  // CREATE CLIENTS
+  // CREATE BASIC CLIENTS
   async createBasicClient(
     basicClientDto: (typeof BasicClientDto)['_input'],
   ): Promise<string> {
@@ -85,7 +88,7 @@ export class ClientManagementUsecase {
     }
   }
 
-  // CREATE CLIENTS
+  // CREATE CLIENT CNPJ
   async createCnpj(
     clientCnpjDto: (typeof ClientCnpjRegistrationDto)['_input'],
   ): Promise<string> {
@@ -103,7 +106,7 @@ export class ClientManagementUsecase {
       return response.payload;
     } catch (error) {
       this.logger.error(error.message);
-      return error;
+      throw error;
     }
   }
 }

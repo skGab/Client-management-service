@@ -75,7 +75,7 @@ export interface ClientCnpj {
 export class ClientCnpjEntity extends MainEntity {
   constructor(
     public clientCnpj: ClientCnpj,
-    public contractEntity?: ContractEntity[],
+    public contracts?: ContractEntity[],
   ) {
     super(clientCnpj.id);
   }

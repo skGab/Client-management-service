@@ -16,7 +16,7 @@ model BasicClient {
   site         String
   email        String       @unique
   telefone     String
-  cnpj         ClientCnpj[]
+  ClientCnpj   ClientCnpj[]
 }
 
 model ClientCnpj {
@@ -26,7 +26,7 @@ model ClientCnpj {
   site                          String
   cnpj_cpf                      String       @unique
   insc_estadual                 String
-  email                         String       @unique
+  email                         String
   endereco_atendimento          String
   bairro                        String
   cep                           String
