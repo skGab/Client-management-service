@@ -1,13 +1,10 @@
 import { ClientCnpjRegistrationDto } from '../dtos/client-cnpj-registration.dto';
 import {
-  BadGatewayException,
   BadRequestException,
   Body,
   ConflictException,
   Controller,
-  ExceptionFilter,
   Get,
-  HttpException,
   HttpStatus,
   InternalServerErrorException,
   Param,

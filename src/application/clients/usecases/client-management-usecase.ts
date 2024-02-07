@@ -2,7 +2,6 @@ import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { DtoToEntityFactory } from '../../factory/dto-to-entity-factory.service';
 import { ClientCnpjRegistrationDto } from '../dtos/client-cnpj-registration.dto';
 import { ClientRepository } from 'src/domain/repository/client.repository';
-import { BasicClientEntity } from 'src/domain/entity/client.entity';
 import { ShowClientsDTO } from '../dtos/show-clients.dto';
 import { BasicClientDto } from '../dtos/basic-client.dto';
 import { ManageClientStatus } from '../services/manage-client-status.service';

@@ -1,39 +1,14 @@
 import { ContractRegistrationDto } from '../contracts/dtos/contract-registration.dto';
 import { ClientCnpjRegistrationDto } from '../clients/dtos/client-cnpj-registration.dto';
-import { Contract } from 'src/domain/entity/contract.entity';
+import { ContractEntity } from 'src/domain/entity/contract.entity';
 import { BasicClientEntity } from 'src/domain/entity/client.entity';
 import { BasicClientDto } from '../clients/dtos/basic-client.dto';
-import {
-  ClientCnpj,
-  ClientCnpjEntity,
-} from 'src/domain/entity/client-cnpj.entity';
+import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class DtoToEntityFactory {
-  // MAP CONTRACT TO CONTRACT ENTITY
-  public mapContractToEntity(
-    contractRegistrationDto: (typeof ContractRegistrationDto)['_input'],
-  ): Contract {
-    return {
-      cnpj_cpf: contractRegistrationDto.cnpj_cpf,
-      tipo: contractRegistrationDto.tipo,
-      inicio_vigencia: contractRegistrationDto.inicio_vigencia,
-      termino_vigencia: contractRegistrationDto.termino_vigencia,
-      valor_total: contractRegistrationDto.valor_total,
-      data_vencimento: contractRegistrationDto.data_vencimento,
-      servicos_prestados: contractRegistrationDto.servicos_prestados,
-      observacoes_adicionais: contractRegistrationDto.observacoes_adicionais,
-
-      //   RECORRENTE
-      periodicidade: contractRegistrationDto?.periodicidade,
-
-      //   AVULSO
-      numero_parcelas: contractRegistrationDto?.numero_parcelas,
-    };
-  }
-
-  // MAP CLIENT TO CLIENT ENTITY
+  // MAP BASIC CLIENT DTO TO BASIC CLIENT ENTITY
   public mapBasicClientToEntity(
     basicClientDto: (typeof BasicClientDto)['_input'],
   ): BasicClientEntity {
@@ -45,6 +20,7 @@ export class DtoToEntityFactory {
     });
   }
 
+  // MAP CLIENT CNPJ DTO TO CLIENT CNPJ ENTITY
   public mapClientCnpjToEntity(
     clientCnpjDto: (typeof ClientCnpjRegistrationDto)['_input'],
   ): ClientCnpjEntity {
@@ -132,6 +108,28 @@ export class DtoToEntityFactory {
         clientCnpjDto.AdditionalContactsSchema.telefone_terceiro_contato,
       nascimento_terceiro_contato:
         clientCnpjDto.AdditionalContactsSchema.nascimento_terceiro_contato,
+    });
+  }
+
+  // MAP CONTRACT DTO TO CONTRACT ENTITY
+  public mapContractToEntity(
+    contractRegistrationDto: (typeof ContractRegistrationDto)['_input'],
+  ): ContractEntity {
+    return new ContractEntity({
+      cnpj_cpf: contractRegistrationDto.cnpj_cpf,
+      tipo: contractRegistrationDto.tipo,
+      inicio_vigencia: contractRegistrationDto.inicio_vigencia,
+      termino_vigencia: contractRegistrationDto.termino_vigencia,
+      valor_total: contractRegistrationDto.valor_total,
+      data_vencimento: contractRegistrationDto.data_vencimento,
+      servicos_prestados: contractRegistrationDto.servicos_prestados,
+      observacoes_adicionais: contractRegistrationDto.observacoes_adicionais,
+
+      //   RECORRENTE
+      periodicidade: contractRegistrationDto?.periodicidade,
+
+      //   AVULSO
+      numero_parcelas: contractRegistrationDto?.numero_parcelas,
     });
   }
 }

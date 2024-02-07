@@ -8,7 +8,6 @@ import { BasicClientEntity } from 'src/domain/entity/client.entity';
 import { ClientTableVo } from 'src/domain/valueObject/client-table.vo';
 import { ClientCnpjEntity } from 'src/domain/entity/client-cnpj.entity';
 import { ClientFactoryService } from 'src/domain/factory/client.factory.service';
-import { transcode } from 'buffer';
 
 @Injectable()
 export class ClientRepositoryService implements ClientRepository {

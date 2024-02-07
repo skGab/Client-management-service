@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
+  BadRequestException,
   Body,
+  ConflictException,
   Controller,
   Delete,
   Get,
   HttpStatus,
+  InternalServerErrorException,
   Param,
   Post,
   Put,
@@ -22,38 +25,50 @@ import { ContractEntity } from 'src/domain/entity/contract.entity';
 export class ContractController {
   constructor(
     private readonly contractManagementUsecase: ContractManagementUsecase,
-  ) { }
+  ) {}
 
   // EXPIRING CONTRACTS
   @Get('expiring')
   async expiring(): Promise<ApiResponse<ExpiringContractDto[] | string>> {
-    const payload = await this.contractManagementUsecase.getExpiring();
+    try {
+      const payload = await this.contractManagementUsecase.getExpiring();
 
-    if (typeof payload === 'string') {
       return new ApiResponse<ExpiringContractDto[] | string>(
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.OK,
         payload,
       );
+    } catch (error) {
+      throw new InternalServerErrorException('Erro interno no servidor');
     }
-
-    return new ApiResponse<ExpiringContractDto[] | string>(
-      HttpStatus.OK,
-      payload,
-    );
   }
 
   // GET CONTRACT BY ID
   @Get('findOne/:id')
   async contractById(
     @Param() id: { id: string },
-  ): Promise<ApiResponse<ContractEntity | string>> {
-    const payload = await this.contractManagementUsecase.getContractById(id);
+  ): Promise<ApiResponse<ContractEntity>> {
+    try {
+      // CHECK IF HAS ID
+      if (!id || id === undefined || id === null)
+        throw new BadRequestException(
+          'ID não encontrado no corpo da requisição',
+        );
 
-    if (typeof payload === 'string') {
-      return new ApiResponse<string>(HttpStatus.INTERNAL_SERVER_ERROR, payload);
+      // GET CONTRACT
+      const payload = await this.contractManagementUsecase.getContractById(id);
+
+      return new ApiResponse<ContractEntity>(HttpStatus.OK, payload);
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException('Erro interno no servidor');
     }
-
-    return new ApiResponse<ContractEntity | string>(HttpStatus.OK, payload);
   }
 
   // CREATE A CONTRACT
@@ -63,16 +78,19 @@ export class ContractController {
   async register(
     @Body() contractRegistration: (typeof ContractRegistrationDto)['_input'],
   ): Promise<ApiResponse<string>> {
-    const response =
-      await this.contractManagementUsecase.createContract(contractRegistration);
+    try {
+      const response =
+        await this.contractManagementUsecase.createContract(
+          contractRegistration,
+        );
 
-    if (typeof response === 'string') {
-      return new ApiResponse<string>(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        response,
-      );
+      return new ApiResponse<string>(HttpStatus.OK, response);
+    } catch (error) {
+      if (error instanceof ConflictException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException('Erro interno no servidor');
     }
-
-    return new ApiResponse<string>(HttpStatus.OK, response);
   }
 }
