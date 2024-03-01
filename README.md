@@ -64,22 +64,18 @@
 ## Instruções de Uso <a name="glossary"></a>
 - Rotas para gerenciamento de clientes:
 
-``
-GET /clients <br>
+GET /clients 
 GET /clients/findOne/:id
 POST /clients/registration
-``
 
 <br>
 
 - Rotas para gerenciamento de contratos: 
 
-``
 GET /contracts/expiring
 GET /contracts/all/:id
 GET /contracts/findOne/:id
 POST /contracts/registration
-``
 
 <br>
 
