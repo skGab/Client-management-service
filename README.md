@@ -1,73 +1,137 @@
+<!-- TITLE -->
+<h1 align="center" color="black">Client Management Service</h1>
+
+<!-- THUMB -->
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
+        <img src="./doc_thumb.png" width="250px" style="box-shadow: 1px 2px 4px gray;" alt="Logo do Projeto" object-fit="cover">
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<!-- STATUS -->
+<div align="center">
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![GitHub Issues](https://img.shields.io/github/issues/skGab/Client-management-service.svg)](https://github.com/skGab/Client-management-service/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/skGab/Client-management-service.svg)](https://github.com/skGab/Client-management-service/pulls)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
+
+</div>
+
+---
+
+<!-- DESCRIPTION -->
+<p align="center"> 
+        💡 
+        Desenvolvimento de um sistema de gestão de clientes, envolvendo a criação de uma API dedicada ao cadastro de clientes e contratos.
+  <br> 
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+<!-- INTRO -->
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Índice
 
-## Installation
+-   [Tecnologias](#tecnologies)
+-   [Introdução & O que o sistema deve fazer](#goal)
+-   [Funcionalidades](#features)
+-   [Requerimentos de qualidade](#quality)
+-   [Instruções de Uso](#glossary)
+-   [Autor](#authors)
 
-```bash
-$ npm install
-```
+## Tecnologias <a name="tecnologies"></a>
 
-## Running the app
+- Node.js
+- Typescript
+- NestJS
+- Zod (Validação)
+- Prisma 
 
-```bash
-# development
-$ npm run start
+## Objetivo <a name="goal"></a>
 
-# watch mode
-$ npm run start:dev
+  O objetivo deste serviço é complementar uma plataforma que abrange diversas funcionalidades essenciais, incluindo o acompanhamento dos prazos de vencimento dos contratos e a gestão do status do cliente, possibilitando diferenciar entre ativos e inativos, sendo possivel tambem o cadastro de clientes e contratos.
 
-# production mode
-$ npm run start:prod
-```
+## Funcionalidades <a name="features"></a>
 
-## Test
+- Cadastro de clientes
+- Gestão de vencimento de contratos
+- Controle de status de clientes
+- Cadastro de novos contratos 
 
-```bash
-# unit tests
-$ npm run test
+## Requerimentos de qualidade <a name="quality"></a>
 
-# e2e tests
-$ npm run test:e2e
+- Escalavel
+- Performance
+- Sustentável
 
-# test coverage
-$ npm run test:cov
-```
+## Instruções de Uso <a name="glossary"></a>
+-Rotas para gerenciamento de clientes:
 
-## Support
+``
+GET /clients
+GET /clients/findOne/:id
+POST /clients/registration
+``
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+<br>
 
-## Stay in touch
+- Rotas para gerenciamento de contratos: 
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+``
+GET /contracts/expiring
+GET /contracts/all/:id
+GET /contracts/findOne/:id
+POST /contracts/registration
+``
 
-## License
+<br>
 
-Nest is [MIT licensed](LICENSE).
+- Certifique-se de ter o Node.js instalado em seu sistema. Em seguida, execute o seguinte comando para instalar as dependências do projeto:
+
+``
+npm install
+``
+
+<br>
+
+- Para iniciar o servidor de desenvolvimento local, utilize o seguinte comando:
+
+``
+npm run start:dev
+``
+
+O sistema estará disponível em http://localhost:8080/. As alterações no código serão recarregadas automaticamente no navegador durante o desenvolvimento.
+
+<br>
+
+- Para criar a versão final do projeto otimizada para produção, execute o seguinte comando:
+
+``
+npm run build
+``
+
+Os arquivos finais serão gerados na pasta 'dist'.
+
+<br>
+
+- Após o processo de build, visualize a versão de produção localmente com o seguinte comando:
+
+
+``
+npm run start:prod
+``
+
+O sistema estará disponível em http://localhost:8080/ em uma versão otimizada para produção.
+
+<br>
+
+- O projeto utiliza ESLint para análise estática do código e Prettier para formatação. Verifique problemas de linting ou formate o código automaticamente com os seguintes comandos:
+
+``
+npm run lint
+``
+
+``
+npm run format 
+``
+
+## Autor <a name="authors"></a>
+
+-   [@Gabriel Assunção](https://github.com/skGab) - Ideia e Construção
