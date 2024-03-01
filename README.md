@@ -62,10 +62,10 @@
 - Sustentável
 
 ## Instruções de Uso <a name="glossary"></a>
--Rotas para gerenciamento de clientes:
+- Rotas para gerenciamento de clientes:
 
 ``
-GET /clients
+GET /clients <br>
 GET /clients/findOne/:id
 POST /clients/registration
 ``
